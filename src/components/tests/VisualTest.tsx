@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { submitScore } from '../../lib/api';
 import { TestType } from '../../lib/supabase';
-import { delay, randomInt, shuffleArray } from '../../lib/utils';
+import { delay, randomInt, shuffleArray, saveBestScore } from '../../lib/utils';
 import ResultEvaluation from '../ResultEvaluation';
 
 type GameState = 'start' | 'showing' | 'input' | 'result' | 'failed';
@@ -108,6 +108,14 @@ export default function VisualTest() {
         setTimeout(async () => {
           if (lives <= 1) {
             setGameState('failed');
+            
+            // 保存最佳成绩到localStorage
+            if (maxLevel > 0) {
+              const isNewBest = saveBestScore('visual', maxLevel);
+              if (isNewBest) {
+                console.log('新的最佳视觉记忆记录:', maxLevel + '关');
+              }
+            }
             
             // 自动上传分数（如果达到了一定等级）
             if (maxLevel >= 3) {

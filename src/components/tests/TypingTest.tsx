@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { submitScore } from '../../lib/api';
 import { TestType } from '../../lib/supabase';
-import { delay, shuffleArray } from '../../lib/utils';
+import { delay, shuffleArray, saveBestScore } from '../../lib/utils';
 import ResultEvaluation from '../ResultEvaluation';
 
 type GameState = 'start' | 'typing' | 'result';
@@ -128,6 +128,14 @@ export default function TypingTest() {
       
       setStats(finalStats);
       setGameState('result');
+      
+      // 保存最佳成绩到localStorage
+      if (wpm > 0) {
+        const isNewBest = saveBestScore('typing', wpm);
+        if (isNewBest) {
+          console.log('新的最佳打字速度记录:', wpm + ' WPM');
+        }
+      }
       
       // 自动上传分数
       if (wpm > 0) {

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { submitScore } from '../../lib/api';
 import { TestType } from '../../lib/supabase';
-import { delay, randomInt } from '../../lib/utils';
+import { delay, randomInt, saveBestScore } from '../../lib/utils';
 import ResultEvaluation from '../ResultEvaluation';
 
 type GameState = 'start' | 'showing' | 'input' | 'result' | 'failed';
@@ -131,6 +131,14 @@ export default function SequenceTest() {
     if (sequence[currentIndex] !== cellId) {
       // 输入错误，游戏结束
       setGameState('failed');
+      
+      // 保存最佳成绩到localStorage
+      if (maxLevel > 0) {
+        const isNewBest = saveBestScore('sequence', maxLevel);
+        if (isNewBest) {
+          console.log('新的最佳序列记忆记录:', maxLevel + '关');
+        }
+      }
       
       // 自动上传分数（如果达到了一定等级）
       if (maxLevel >= 3) {

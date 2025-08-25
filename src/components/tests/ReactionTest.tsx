@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { submitScore } from '../../lib/api';
 import { TestType } from '../../lib/supabase';
-import { delay, randomInt } from '../../lib/utils';
+import { delay, randomInt, saveBestScore } from '../../lib/utils';
 import ResultEvaluation from '../ResultEvaluation';
 
 type GameState = 'waiting' | 'ready' | 'go' | 'result' | 'tooEarly';
@@ -50,6 +50,14 @@ export default function ReactionTest() {
       const reaction = endTime - startTime;
       setReactionTime(reaction);
       setGameState('result');
+      
+      // 保存最佳成绩到localStorage
+      if (reaction > 0) {
+        const isNewBest = saveBestScore('reaction', reaction);
+        if (isNewBest) {
+          console.log('新的最佳反应时间记录:', reaction + 'ms');
+        }
+      }
       
       // 自动上传分数
       if (reaction > 0) {

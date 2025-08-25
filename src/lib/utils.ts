@@ -102,3 +102,130 @@ export function shuffleArray<T>(array: T[]): T[] {
   }
   return shuffled;
 }
+
+/**
+ * 最佳成绩数据类型
+ */
+export interface BestScore {
+  score: number;
+  date: string;
+  testType: string;
+}
+
+/**
+ * 所有测试类型的最佳成绩记录
+ */
+export interface BestScores {
+  reaction?: BestScore;
+  memory?: BestScore;
+  visual?: BestScore;
+  sequence?: BestScore;
+  typing?: BestScore;
+}
+
+const BEST_SCORES_KEY = 'brain-mark-best-scores';
+
+/**
+ * 获取所有最佳成绩
+ * 从localStorage中读取用户的最佳成绩记录
+ */
+export function getBestScores(): BestScores {
+  if (typeof window === 'undefined') return {};
+  
+  try {
+    const stored = localStorage.getItem(BEST_SCORES_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch (error) {
+    console.error('Error reading best scores from localStorage:', error);
+    return {};
+  }
+}
+
+/**
+ * 获取特定测试类型的最佳成绩
+ * @param testType 测试类型
+ * @returns 最佳成绩记录或null
+ */
+export function getBestScore(testType: string): BestScore | null {
+  const bestScores = getBestScores();
+  return bestScores[testType as keyof BestScores] || null;
+}
+
+/**
+ * 保存最佳成绩
+ * 如果新成绩更好，则更新localStorage中的记录
+ * @param testType 测试类型
+ * @param score 新成绩
+ * @returns 是否创建了新的最佳成绩记录
+ */
+export function saveBestScore(testType: string, score: number): boolean {
+  if (typeof window === 'undefined') return false;
+  
+  const bestScores = getBestScores();
+  const currentBest = bestScores[testType as keyof BestScores];
+  
+  // 判断是否是更好的成绩
+  const isBetter = isScoreBetter(testType, score, currentBest?.score);
+  
+  if (isBetter) {
+    const newBestScore: BestScore = {
+      score,
+      date: new Date().toISOString(),
+      testType
+    };
+    
+    const updatedScores = {
+      ...bestScores,
+      [testType]: newBestScore
+    };
+    
+    try {
+      localStorage.setItem(BEST_SCORES_KEY, JSON.stringify(updatedScores));
+      return true;
+    } catch (error) {
+      console.error('Error saving best score to localStorage:', error);
+      return false;
+    }
+  }
+  
+  return false;
+}
+
+/**
+ * 判断新成绩是否比当前最佳成绩更好
+ * @param testType 测试类型
+ * @param newScore 新成绩
+ * @param currentBest 当前最佳成绩
+ * @returns 是否更好
+ */
+export function isScoreBetter(testType: string, newScore: number, currentBest?: number): boolean {
+  if (currentBest === undefined) return true;
+  
+  switch (testType) {
+    case 'reaction':
+      // 反应时间：越小越好
+      return newScore < currentBest;
+    case 'memory':
+    case 'visual':
+    case 'sequence':
+    case 'typing':
+      // 其他测试：越大越好
+      return newScore > currentBest;
+    default:
+      return newScore > currentBest;
+  }
+}
+
+/**
+ * 清除所有最佳成绩记录
+ * 主要用于测试或重置功能
+ */
+export function clearBestScores(): void {
+  if (typeof window === 'undefined') return;
+  
+  try {
+    localStorage.removeItem(BEST_SCORES_KEY);
+  } catch (error) {
+    console.error('Error clearing best scores from localStorage:', error);
+  }
+}

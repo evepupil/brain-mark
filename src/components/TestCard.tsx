@@ -1,8 +1,9 @@
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { TestType } from '../lib/supabase';
-import { cn } from '../lib/utils';
+import { cn, getBestScore } from '../lib/utils';
 
 interface TestCardProps {
   testType: TestType;
@@ -12,10 +13,38 @@ interface TestCardProps {
 
 /**
  * 测试项目卡片组件
- * 显示测试项目的基本信息和开始按钮
+ * 显示测试项目的基本信息、开始按钮和最佳成绩
  */
 export default function TestCard({ testType, icon, gradient }: TestCardProps) {
   const { t } = useTranslation('common');
+  const [bestScore, setBestScore] = useState<number | null>(null);
+
+  /**
+   * 加载最佳成绩
+   */
+  useEffect(() => {
+    const bestScoreRecord = getBestScore(testType);
+    setBestScore(bestScoreRecord ? bestScoreRecord.score : null);
+  }, [testType]);
+
+  /**
+   * 格式化最佳成绩显示
+   */
+  const formatBestScore = (score: number, type: TestType): string => {
+    switch (type) {
+      case TestType.REACTION:
+        return `${score}ms`;
+      case TestType.TYPING:
+        return `${score} WPM`;
+      case TestType.MEMORY:
+        return `${score}位数字`;
+      case TestType.VISUAL:
+      case TestType.SEQUENCE:
+        return `等级 ${score}`;
+      default:
+        return `${score}`;
+    }
+  };
 
   return (
     <Link href={`/test/${testType}`}>
@@ -25,8 +54,17 @@ export default function TestCard({ testType, icon, gradient }: TestCardProps) {
         className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer"
       >
         {/* 渐变头部 */}
-        <div className={cn('h-32 bg-gradient-to-br', gradient, 'flex items-center justify-center')}>
+        <div className={cn('h-32 bg-gradient-to-br', gradient, 'flex items-center justify-center relative')}>
           <span className="text-4xl">{icon}</span>
+          
+          {/* 最佳成绩显示 */}
+          {bestScore !== null && (
+            <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm rounded-lg px-2 py-1">
+              <div className="text-white text-xs font-medium">
+                最佳: {formatBestScore(bestScore, testType)}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 卡片内容 */}
