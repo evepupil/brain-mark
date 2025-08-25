@@ -37,7 +37,7 @@ export default function Layout({ children }: LayoutProps) {
                 whileTap={{ scale: 0.95 }}
                 className="text-2xl font-bold text-gray-900"
               >
-                🧠 HB
+                🧠 Brain Mark
               </motion.div>
             </Link>
 
