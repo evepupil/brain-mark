@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { submitScore } from '../../lib/api';
 import { TestType } from '../../lib/supabase';
 import { delay, randomInt } from '../../lib/utils';
-import { ResultEvaluationCompact } from '../ResultEvaluation';
+import ResultEvaluation from '../ResultEvaluation';
 
 type GameState = 'start' | 'showing' | 'input' | 'result' | 'failed';
 
@@ -284,7 +284,7 @@ export default function MemoryTest() {
                 
                 {/* 评价组件 */}
                 <div className="mb-6">
-                  <ResultEvaluationCompact 
+                  <ResultEvaluation 
                     testType="memory" 
                     score={maxLevel}
                   />

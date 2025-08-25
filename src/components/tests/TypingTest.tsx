@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { submitScore } from '../../lib/api';
 import { TestType } from '../../lib/supabase';
 import { delay, shuffleArray } from '../../lib/utils';
-import { ResultEvaluationCompact } from '../ResultEvaluation';
+import ResultEvaluation from '../ResultEvaluation';
 
 type GameState = 'start' | 'typing' | 'result';
 
@@ -365,7 +365,7 @@ export default function TypingTest() {
 
                 {/* 评价系统 */}
                 <div className="mb-6">
-                  <ResultEvaluationCompact 
+                  <ResultEvaluation 
                     testType={TestType.TYPING} 
                     score={stats.wpm} 
                   />

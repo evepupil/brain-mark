@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { submitScore } from '../../lib/api';
 import { TestType } from '../../lib/supabase';
 import { delay, randomInt } from '../../lib/utils';
-import { ResultEvaluationCompact } from '../ResultEvaluation';
+import ResultEvaluation from '../ResultEvaluation';
 
 type GameState = 'waiting' | 'ready' | 'go' | 'result' | 'tooEarly';
 
@@ -197,7 +197,7 @@ export default function ReactionTest() {
         >
           <div className="max-w-2xl mx-auto space-y-6">
             {/* 评价组件 */}
-            <ResultEvaluationCompact 
+            <ResultEvaluation 
               testType="reaction" 
               score={reactionTime}
               className="mb-4"
