@@ -1,0 +1,49 @@
+{
+  "title": "Brain Mark",
+  "description": "测试你的认知能力",
+  "language": "语言",
+  "home": "首页",
+  "leaderboard": "排行榜",
+  "about": "关于",
+  "start": "开始测试",
+  "tryAgain": "再试一次",
+  "share": "分享",
+  "rank": "排名",
+  "score": "分数",
+  "result": "结果",
+  "loading": "加载中...",
+  "error": "出错了",
+  "anonymous": "匿名用户",
+  "tests": {
+    "reaction": {
+      "name": "反应速度",
+      "description": "测试你的反应速度",
+      "unit": "毫秒",
+      "instruction": "当屏幕变绿时立即点击"
+    },
+    "memory": {
+      "name": "数字记忆",
+      "description": "测试你能记住多少位数字",
+      "unit": "位数",
+      "instruction": "记住显示的数字序列"
+    },
+    "visual": {
+      "name": "视觉记忆",
+      "description": "测试你的视觉记忆能力",
+      "unit": "关卡",
+      "instruction": "记住方格的位置"
+    },
+    "typing": {
+      "name": "打字速度",
+      "description": "测试你的打字速度",
+      "unit": "WPM",
+      "instruction": "尽快输入显示的文字"
+    },
+    "sequence": {
+      "name": "序列记忆",
+      "description": "测试你的序列记忆能力",
+      "unit": "关卡",
+      "instruction": "按顺序点击亮起的方块"
+    }
+  }
+}

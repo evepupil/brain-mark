@@ -1,0 +1,49 @@
+{
+  "title": "Brain Mark",
+  "description": "Test your cognitive abilities",
+  "language": "Language",
+  "home": "Home",
+  "leaderboard": "Leaderboard",
+  "about": "About",
+  "start": "Start Test",
+  "tryAgain": "Try Again",
+  "share": "Share",
+  "rank": "Rank",
+  "score": "Score",
+  "result": "Result",
+  "loading": "Loading...",
+  "error": "Error occurred",
+  "anonymous": "Anonymous User",
+  "tests": {
+    "reaction": {
+      "name": "Reaction Time",
+      "description": "Test your reaction speed",
+      "unit": "ms",
+      "instruction": "Click when the screen turns green"
+    },
+    "memory": {
+      "name": "Number Memory",
+      "description": "Test how many digits you can remember",
+      "unit": "digits",
+      "instruction": "Remember the number sequence shown"
+    },
+    "visual": {
+      "name": "Visual Memory",
+      "description": "Test your visual memory",
+      "unit": "level",
+      "instruction": "Remember the positions of the squares"
+    },
+    "typing": {
+      "name": "Typing Speed",
+      "description": "Test your typing speed",
+      "unit": "WPM",
+      "instruction": "Type the displayed text as fast as possible"
+    },
+    "sequence": {
+      "name": "Sequence Memory",
+      "description": "Test your sequence memory",
+      "unit": "level",
+      "instruction": "Click the squares in the order they light up"
+    }
+  }
+}
