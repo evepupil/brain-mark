@@ -30,6 +30,8 @@ export default function VisualTest() {
   const [grid, setGrid] = useState<GridCell[]>([]);
   const [showTime, setShowTime] = useState(2000); // 显示时间
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [maxLevel, setMaxLevel] = useState(0);
   const [mistakes, setMistakes] = useState(0);
   const [lives, setLives] = useState(3); // 生命值
@@ -103,9 +105,31 @@ export default function VisualTest() {
         }));
         setGrid(gridWithResults);
         
-        setTimeout(() => {
+        setTimeout(async () => {
           if (lives <= 1) {
             setGameState('failed');
+            
+            // 自动上传分数（如果达到了一定等级）
+            if (maxLevel >= 3) {
+              setIsSubmitting(true);
+              setSubmissionError(null);
+              setSubmissionSuccess(false);
+              
+              try {
+                await submitScore(TestType.VISUAL, maxLevel, {
+                  timestamp: Date.now(),
+                  mistakes,
+                  finalGridSize: gridSize,
+                  finalTargetCount: targetCount,
+                });
+                setSubmissionSuccess(true);
+              } catch (error: any) {
+                console.error('自动提交分数失败:', error);
+                setSubmissionError(error.message || '分数上传失败');
+              } finally {
+                setIsSubmitting(false);
+              }
+            }
           } else {
             // 重新开始当前关卡
             startRound();
@@ -158,30 +182,12 @@ export default function VisualTest() {
     setMaxLevel(0);
     setMistakes(0);
     setLives(3);
+    setSubmissionError(null);
+    setSubmissionSuccess(false);
     setGameState('start');
   }, []);
 
-  /**
-   * 提交最终分数
-   */
-  const handleSubmitScore = useCallback(async () => {
-    if (maxLevel === 0) return;
-    
-    setIsSubmitting(true);
-    try {
-      await submitScore(TestType.VISUAL, maxLevel, {
-        timestamp: Date.now(),
-        mistakes,
-        finalGridSize: gridSize,
-        finalTargetCount: targetCount,
-      });
-      router.push('/leaderboard?test=visual');
-    } catch (error) {
-      console.error('提交分数失败:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [maxLevel, mistakes, gridSize, targetCount, router]);
+
 
   /**
    * 获取格子样式
@@ -363,6 +369,28 @@ export default function VisualTest() {
                   />
                 </div>
                 
+                {/* 自动上传状态提示 */}
+                <div className="mb-6">
+                  {isSubmitting && (
+                    <div className="flex items-center justify-center text-blue-600">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                      正在自动上传分数...
+                    </div>
+                  )}
+                  {submissionSuccess && (
+                    <div className="flex items-center justify-center text-green-600">
+                      <span className="mr-2">✅</span>
+                      分数已成功上传到排行榜！
+                    </div>
+                  )}
+                  {submissionError && (
+                    <div className="flex items-center justify-center text-red-600">
+                      <span className="mr-2">❌</span>
+                      {submissionError}
+                    </div>
+                  )}
+                </div>
+                
                 <div className="space-x-4">
                   <button
                     onClick={restartGame}
@@ -371,11 +399,10 @@ export default function VisualTest() {
                     重新开始
                   </button>
                   <button
-                    onClick={handleSubmitScore}
-                    disabled={isSubmitting || maxLevel === 0}
-                    className="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50"
+                    onClick={() => router.push('/leaderboard?test=visual')}
+                    className="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors"
                   >
-                    {isSubmitting ? '提交中...' : '查看排名'}
+                    查看排行榜
                   </button>
                 </div>
               </motion.div>

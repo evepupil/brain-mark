@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app';
 import { appWithTranslation } from 'next-i18next';
+import { Analytics } from '@vercel/analytics/next';
 import Head from 'next/head';
 import '../index.css';
 
@@ -16,6 +17,7 @@ function App({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.svg" />
       </Head>
       <Component {...pageProps} />
+      <Analytics />
     </>
   );
 }

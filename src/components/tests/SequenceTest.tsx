@@ -29,6 +29,8 @@ export default function SequenceTest() {
   const [grid, setGrid] = useState<GridCell[]>([]);
   const [showingIndex, setShowingIndex] = useState(-1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [maxLevel, setMaxLevel] = useState(0);
   const [playbackSpeed, setPlaybackSpeed] = useState(600); // 播放速度（毫秒）
 
@@ -129,6 +131,30 @@ export default function SequenceTest() {
     if (sequence[currentIndex] !== cellId) {
       // 输入错误，游戏结束
       setGameState('failed');
+      
+      // 自动上传分数（如果达到了一定等级）
+      if (maxLevel >= 3) {
+        setIsSubmitting(true);
+        setSubmissionError(null);
+        setSubmissionSuccess(false);
+        
+        (async () => {
+          try {
+            await submitScore(TestType.SEQUENCE, maxLevel, {
+              timestamp: Date.now(),
+              finalSpeed: playbackSpeed,
+              sequenceLength: currentLevel - 1,
+            });
+            setSubmissionSuccess(true);
+          } catch (error: any) {
+            console.error('自动提交分数失败:', error);
+            setSubmissionError(error.message || '分数上传失败');
+          } finally {
+            setIsSubmitting(false);
+          }
+        })();
+      }
+      
       return;
     }
     
@@ -161,30 +187,13 @@ export default function SequenceTest() {
     setCurrentLevel(1);
     setPlaybackSpeed(600);
     setMaxLevel(0);
+    setSubmissionError(null);
+    setSubmissionSuccess(false);
     setGameState('start');
     initializeGrid();
   }, [initializeGrid]);
 
-  /**
-   * 提交最终分数
-   */
-  const handleSubmitScore = useCallback(async () => {
-    if (maxLevel === 0) return;
-    
-    setIsSubmitting(true);
-    try {
-      await submitScore(TestType.SEQUENCE, maxLevel, {
-        timestamp: Date.now(),
-        finalSpeed: playbackSpeed,
-        sequenceLength: currentLevel - 1,
-      });
-      router.push('/leaderboard?test=sequence');
-    } catch (error) {
-      console.error('提交分数失败:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [maxLevel, playbackSpeed, currentLevel, router]);
+
 
   /**
    * 获取格子样式
@@ -389,6 +398,28 @@ export default function SequenceTest() {
                   />
                 </div>
                 
+                {/* 自动上传状态提示 */}
+                <div className="mb-6">
+                  {isSubmitting && (
+                    <div className="flex items-center justify-center text-blue-600">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                      正在自动上传分数...
+                    </div>
+                  )}
+                  {submissionSuccess && (
+                    <div className="flex items-center justify-center text-green-600">
+                      <span className="mr-2">✅</span>
+                      分数已成功上传到排行榜！
+                    </div>
+                  )}
+                  {submissionError && (
+                    <div className="flex items-center justify-center text-red-600">
+                      <span className="mr-2">❌</span>
+                      {submissionError}
+                    </div>
+                  )}
+                </div>
+                
                 <div className="space-x-4">
                   <button
                     onClick={restartGame}
@@ -397,11 +428,10 @@ export default function SequenceTest() {
                     重新开始
                   </button>
                   <button
-                    onClick={handleSubmitScore}
-                    disabled={isSubmitting || maxLevel === 0}
-                    className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                    onClick={() => router.push('/leaderboard?test=sequence')}
+                    className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
                   >
-                    {isSubmitting ? '提交中...' : '查看排名'}
+                    查看排行榜
                   </button>
                 </div>
               </motion.div>

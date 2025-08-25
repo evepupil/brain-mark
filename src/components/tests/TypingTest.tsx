@@ -32,6 +32,8 @@ export default function TypingTest() {
   const [endTime, setEndTime] = useState<number | null>(null);
   const [stats, setStats] = useState<TypingStats | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [testDuration, setTestDuration] = useState(60); // 测试时长（秒）
   const [timeLeft, setTimeLeft] = useState(60);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -80,7 +82,23 @@ export default function TypingTest() {
   /**
    * 完成测试
    */
-  const finishTest = useCallback(() => {
+  /**
+   * 计算正确字符数
+   */
+  const calculateCorrectChars = useCallback(() => {
+    let correct = 0;
+    for (let i = 0; i < Math.min(userInput.length, testText.length); i++) {
+      if (userInput[i] === testText[i]) {
+        correct++;
+      }
+    }
+    return correct;
+  }, [userInput, testText]);
+
+  /**
+   * 完成测试
+   */
+  const finishTest = useCallback(async () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -90,7 +108,7 @@ export default function TypingTest() {
     setEndTime(endTime);
     
     if (startTime) {
-      const timeElapsed = (endTime - startTime) / 1000; // 秒
+      const timeElapsed = (endTime - startTime) / 1000;
       const correctChars = calculateCorrectChars();
       const totalChars = userInput.length;
       const accuracy = totalChars > 0 ? (correctChars / totalChars) * 100 : 0;
@@ -110,21 +128,38 @@ export default function TypingTest() {
       
       setStats(finalStats);
       setGameState('result');
-    }
-  }, [startTime, userInput]);
-
-  /**
-   * 计算正确字符数
-   */
-  const calculateCorrectChars = useCallback(() => {
-    let correct = 0;
-    for (let i = 0; i < Math.min(userInput.length, testText.length); i++) {
-      if (userInput[i] === testText[i]) {
-        correct++;
+      
+      // 自动上传分数
+      if (wpm > 0) {
+        setIsSubmitting(true);
+        setSubmissionError(null);
+        setSubmissionSuccess(false);
+        
+        try {
+          await submitScore(TestType.TYPING, wpm, {
+            timestamp: Date.now(),
+            accuracy: finalStats.accuracy,
+            correctChars: finalStats.correctChars,
+            totalChars: finalStats.totalChars,
+            timeElapsed: finalStats.timeElapsed,
+          });
+          setSubmissionSuccess(true);
+        } catch (error: any) {
+          console.error('自动提交分数失败:', error);
+          setSubmissionError(error.message || '分数上传失败');
+        } finally {
+          setIsSubmitting(false);
+        }
       }
     }
-    return correct;
-  }, [userInput, testText]);
+  }, [startTime, userInput, calculateCorrectChars]);
+
+  // 自动检测测试完成并提交分数
+  useEffect(() => {
+    if (gameState === 'typing' && startTime && userInput.length >= testText.length) {
+      finishTest();
+    }
+  }, [gameState, startTime, userInput.length, testText.length, finishTest]);
 
   /**
    * 处理输入变化
@@ -149,31 +184,12 @@ export default function TypingTest() {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
+    setSubmissionError(null);
+    setSubmissionSuccess(false);
     setGameState('start');
   }, []);
 
-  /**
-   * 提交分数
-   */
-  const handleSubmitScore = useCallback(async () => {
-    if (!stats) return;
-    
-    setIsSubmitting(true);
-    try {
-      await submitScore(TestType.TYPING, stats.wpm, {
-        timestamp: Date.now(),
-        accuracy: stats.accuracy,
-        correctChars: stats.correctChars,
-        totalChars: stats.totalChars,
-        timeElapsed: stats.timeElapsed,
-      });
-      router.push('/leaderboard?test=typing');
-    } catch (error) {
-      console.error('提交分数失败:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [stats, router]);
+
 
   /**
    * 获取字符样式
@@ -348,11 +364,33 @@ export default function TypingTest() {
                 </div>
 
                 {/* 评价系统 */}
-                <div className="mb-8">
+                <div className="mb-6">
                   <ResultEvaluationCompact 
                     testType={TestType.TYPING} 
                     score={stats.wpm} 
                   />
+                </div>
+
+                {/* 自动上传状态提示 */}
+                <div className="mb-6">
+                  {isSubmitting && (
+                    <div className="flex items-center justify-center text-blue-600">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                      正在自动上传分数...
+                    </div>
+                  )}
+                  {submissionSuccess && (
+                    <div className="flex items-center justify-center text-green-600">
+                      <span className="mr-2">✅</span>
+                      分数已成功上传到排行榜！
+                    </div>
+                  )}
+                  {submissionError && (
+                    <div className="flex items-center justify-center text-red-600">
+                      <span className="mr-2">❌</span>
+                      {submissionError}
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-x-4">
@@ -363,11 +401,10 @@ export default function TypingTest() {
                     重新测试
                   </button>
                   <button
-                    onClick={handleSubmitScore}
-                    disabled={isSubmitting}
-                    className="bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors disabled:opacity-50"
+                    onClick={() => router.push('/leaderboard?test=typing')}
+                    className="bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
                   >
-                    {isSubmitting ? '提交中...' : '查看排名'}
+                    查看排行榜
                   </button>
                 </div>
               </motion.div>

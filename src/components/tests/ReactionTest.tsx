@@ -20,6 +20,8 @@ export default function ReactionTest() {
   const [startTime, setStartTime] = useState<number>(0);
   const [reactionTime, setReactionTime] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [submissionSuccess, setSubmissionSuccess] = useState(false);
 
   /**
    * 开始测试
@@ -38,7 +40,7 @@ export default function ReactionTest() {
   /**
    * 处理点击事件
    */
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback(async () => {
     if (gameState === 'ready') {
       // 太早点击
       setGameState('tooEarly');
@@ -48,6 +50,25 @@ export default function ReactionTest() {
       const reaction = endTime - startTime;
       setReactionTime(reaction);
       setGameState('result');
+      
+      // 自动上传分数
+      if (reaction > 0) {
+        setIsSubmitting(true);
+        setSubmissionError(null);
+        setSubmissionSuccess(false);
+        
+        try {
+          await submitScore(TestType.REACTION, reaction, {
+            timestamp: Date.now(),
+          });
+          setSubmissionSuccess(true);
+        } catch (error: any) {
+          console.error('自动提交分数失败:', error);
+          setSubmissionError(error.message || '分数上传失败');
+        } finally {
+          setIsSubmitting(false);
+        }
+      }
     }
   }, [gameState, startTime]);
 
@@ -58,27 +79,11 @@ export default function ReactionTest() {
     setGameState('waiting');
     setReactionTime(0);
     setStartTime(0);
+    setSubmissionError(null);
+    setSubmissionSuccess(false);
   }, []);
 
-  /**
-   * 提交分数
-   */
-  const handleSubmitScore = useCallback(async () => {
-    if (reactionTime === 0) return;
-    
-    setIsSubmitting(true);
-    try {
-      await submitScore(TestType.REACTION, reactionTime, {
-        timestamp: Date.now(),
-      });
-      // 跳转到排行榜
-      router.push('/leaderboard?test=reaction');
-    } catch (error) {
-      console.error('提交分数失败:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [reactionTime, router]);
+
 
   /**
    * 获取背景颜色
@@ -198,6 +203,28 @@ export default function ReactionTest() {
               className="mb-4"
             />
             
+            {/* 自动上传状态提示 */}
+            <div className="mb-4">
+              {isSubmitting && (
+                <div className="flex items-center justify-center text-blue-600">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                  正在自动上传分数...
+                </div>
+              )}
+              {submissionSuccess && (
+                <div className="flex items-center justify-center text-green-600">
+                  <span className="mr-2">✅</span>
+                  分数已成功上传到排行榜！
+                </div>
+              )}
+              {submissionError && (
+                <div className="flex items-center justify-center text-red-600">
+                  <span className="mr-2">❌</span>
+                  {submissionError}
+                </div>
+              )}
+            </div>
+            
             {/* 操作按钮 */}
             <div className="flex space-x-4">
               <button
@@ -207,11 +234,10 @@ export default function ReactionTest() {
                 {t('tryAgain')}
               </button>
               <button
-                onClick={handleSubmitScore}
-                disabled={isSubmitting}
-                className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+                onClick={() => router.push('/leaderboard?test=reaction')}
+                className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
               >
-                {isSubmitting ? t('loading') : '查看排名'}
+                查看排行榜
               </button>
             </div>
           </div>
