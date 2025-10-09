@@ -45,5 +45,8 @@
       "unit": "关卡",
       "instruction": "按顺序点击亮起的方块"
     }
+  },
+  "footer": {
+    "copyright": "© 2025 Brain Mark. 由 Yetong 制作，用于认知测试。"
   }
 }
