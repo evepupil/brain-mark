@@ -3,6 +3,7 @@
   "description": "Test your cognitive abilities",
   "language": "Language",
   "home": "Home",
+  "test": "Test",
   "leaderboard": "Leaderboard",
   "about": "About",
   "start": "Start Test",
@@ -48,5 +49,14 @@
   },
   "footer": {
     "copyright": "© 2025 Brain Mark. Made by Yetong for cognitive testing."
+  },
+  "aboutPage": {
+    "title": "About FreeFocusGames",
+    "greeting": "Hello! I'm the creator of FreeFocusGames.",
+    "introduction": "I created this website because I was frustrated with finding high-quality brain training games that were constantly blocked by paywalls and cluttered, tedious website experiences. I believe everyone should have free access to these tools without being stopped by payment barriers.",
+    "mission": "Every game here is backed by science—such as working memory training, attention exercises, and processing speed challenges. I've carefully designed them to be both effective and enjoyable. Whether you're a student looking to improve focus, an adult concerned about memory health, or simply someone interested in brain training, I believe you'll find games that suit you.",
+    "hope": "I hope these games can help you and that you enjoy them. There's no pressure here—feel free to choose games that interest you and enjoy the process. Even playing for just a few minutes each day is a beneficial mental exercise.",
+    "feedback": "If you have any feedback or suggestions, I'd love to hear from you.",
+    "contact": "Contact: contact@freefocusgames.com"
   }
 }
