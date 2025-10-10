@@ -7,7 +7,7 @@ const path = require('path');
  */
 
 // 网站基础配置
-const SITE_URL = 'https://freefocusgames.com'; // 请根据实际域名修改
+const SITE_URL = 'https://bm.chaosyn.com'; // 请根据实际域名修改
 const OUTPUT_PATH = path.join(__dirname, '..', 'public', 'sitemap.xml');
 
 // 静态页面配置
