@@ -8,6 +8,7 @@ import Layout from '../components/Layout';
 import { getLeaderboard, getTestStats } from '../lib/api';
 import { TestType, LeaderboardRecord } from '../lib/supabase';
 import { formatTestResult } from '../lib/utils';
+import SEOHead, { pageSEOConfig } from '../components/SEOHead';
 
 interface TestStats {
   totalPlayers: number;
@@ -150,7 +151,13 @@ export default function Leaderboard() {
   const currentTestConfig = testTypes.find(t => t.type === selectedTest);
 
   return (
-    <Layout>
+    <>
+      <SEOHead
+        title={pageSEOConfig.leaderboard.title}
+        description={pageSEOConfig.leaderboard.description}
+        keywords={pageSEOConfig.leaderboard.keywords}
+      />
+      <Layout>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8">
         <div className="max-w-6xl mx-auto px-4">
           {/* 页面标题 */}
@@ -318,7 +325,8 @@ export default function Leaderboard() {
           </div>
         </div>
       </div>
-    </Layout>
+      </Layout>
+    </>
   );
 }
 

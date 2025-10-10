@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../components/Layout';
+import SEOHead, { pageSEOConfig } from '../components/SEOHead';
 
 /**
  * 关于页面组件
@@ -60,7 +61,13 @@ export default function Home() {
   ];
 
   return (
-    <Layout>
+    <>
+      <SEOHead
+        title={pageSEOConfig.home.title}
+        description={pageSEOConfig.home.description}
+        keywords={pageSEOConfig.home.keywords}
+      />
+      <Layout>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
         {/* Hero Section */}
         <div className="relative overflow-hidden bg-white">
@@ -330,7 +337,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </Layout>
+      </Layout>
+    </>
   );
 }
 
