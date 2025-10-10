@@ -30,14 +30,14 @@ export default function SEOHead({
   const { locale } = router;
   
   // 默认SEO配置
-  const defaultTitle = 'FreeFocusGames - 专业认知能力测试平台';
-  const defaultDescription = 'FreeFocusGames提供科学的认知能力测试，包括反应速度、记忆力、注意力等多项测试，帮助您全面了解和提升大脑认知能力';
+  const defaultTitle = 'bm.chaosyn - 专业认知能力测试平台';
+  const defaultDescription = 'bm.chaosyn提供科学的认知能力测试，包括反应速度、记忆力、注意力等多项测试，帮助您全面了解和提升大脑认知能力';
   const defaultKeywords = '认知测试,反应速度测试,记忆力测试,注意力测试,大脑训练,认知能力,brain test,cognitive assessment';
   const defaultImage = '/og-image.jpg';
-  const baseUrl = 'https://freefocusgames.com';
+  const baseUrl = 'https://bm.chaosyn.com';
   
   // 构建完整的SEO数据
-  const seoTitle = title ? `${title} - FreeFocusGames` : defaultTitle;
+  const seoTitle = title ? `${title} - bm.chaosyn` : defaultTitle;
   const seoDescription = description || defaultDescription;
   const seoKeywords = keywords ? `${keywords},${defaultKeywords}` : defaultKeywords;
   const seoImage = image || defaultImage;
@@ -52,7 +52,7 @@ export default function SEOHead({
   const defaultStructuredData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "FreeFocusGames",
+    "name": "bm.chaosyn",
     "description": finalDescription,
     "url": baseUrl,
     "potentialAction": {
@@ -65,7 +65,7 @@ export default function SEOHead({
     },
     "publisher": {
       "@type": "Organization",
-      "name": "FreeFocusGames",
+      "name": "bm.chaosyn",
       "url": baseUrl,
       "logo": {
         "@type": "ImageObject",
@@ -74,7 +74,7 @@ export default function SEOHead({
     },
     "mainEntity": {
       "@type": "WebApplication",
-      "name": "FreeFocusGames认知测试平台",
+      "name": "bm.chaosyn认知测试平台",
       "description": "专业的认知能力测试平台，提供反应速度、记忆力、注意力等多项科学测试",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
@@ -99,7 +99,7 @@ export default function SEOHead({
         "@type": "WebSite",
         "mainEntity": {
           "@type": "WebApplication",
-          "name": "FreeFocusGames认知测试平台",
+          "name": "bm.chaosyn认知测试平台",
           "description": "专业的认知能力测试平台，提供反应速度、记忆力、注意力等多项科学测试",
           "applicationCategory": "EducationalApplication",
           "operatingSystem": "Web Browser"
@@ -165,7 +165,7 @@ export default function SEOHead({
       <meta property="og:image" content={`${baseUrl}${seoImage}`} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:site_name" content="FreeFocusGames" />
+      <meta property="og:site_name" content="bm.chaosyn" />
       <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
       
       {/* Twitter Card标签 */}
@@ -173,7 +173,7 @@ export default function SEOHead({
       <meta name="twitter:title" content={finalTitle} />
       <meta name="twitter:description" content={finalDescription} />
       <meta name="twitter:image" content={`${baseUrl}${seoImage}`} />
-      <meta name="twitter:creator" content="@FreeFocusGames" />
+      <meta name="twitter:creator" content="@bm.chaosyn" />
       
       {/* 语言相关 */}
       {locale === 'zh' && <link rel="alternate" hrefLang="en" href={`${baseUrl}/en${router.asPath}`} />}
@@ -197,7 +197,7 @@ export default function SEOHead({
 export const pageSEOConfig = {
   home: {
     title: '首页',
-    description: 'FreeFocusGames是专业的认知能力测试平台，提供反应速度、记忆力、注意力等科学测试，帮助您了解大脑认知能力',
+    description: 'bm.chaosyn是专业的认知能力测试平台，提供反应速度、记忆力、注意力等科学测试，帮助您了解大脑认知能力',
     keywords: '首页,认知测试平台,大脑测试'
   },
   test: {
@@ -207,7 +207,7 @@ export const pageSEOConfig = {
   },
   about: {
     title: '关于我们',
-    description: '了解FreeFocusGames的创建理念和使命，我们致力于为用户提供科学、有趣的认知能力测试体验',
+    description: '了解bm.chaosyn的创建理念和使命，我们致力于为用户提供科学、有趣的认知能力测试体验',
     keywords: '关于我们,网站介绍,认知科学'
   },
   leaderboard: {
