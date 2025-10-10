@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import Layout from '../../components/Layout';
 import TestCard from '../../components/TestCard';
 import { TestType } from '../../lib/supabase';
+import SEOHead, { pageSEOConfig } from '../../components/SEOHead';
 
 /**
  * 测试页面组件
@@ -45,11 +46,13 @@ export default function TestPage() {
   ];
 
   return (
-    <Layout>
-      <Head>
-        <title>{t('test')} - {t('title')}</title>
-        <meta name="description" content={t('description')} />
-      </Head>
+    <>
+      <SEOHead
+        title={pageSEOConfig.test.title}
+        description={pageSEOConfig.test.description}
+        keywords={pageSEOConfig.test.keywords}
+      />
+      <Layout>
 
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         {/* 头部区域 */}
@@ -102,7 +105,7 @@ export default function TestPage() {
               {t('leaderboard')}
             </Link>
             <Link
-              href="/about"
+              href="/new-about"
               className="hover:text-blue-600 transition-colors"
             >
               {t('about')}
@@ -110,7 +113,8 @@ export default function TestPage() {
           </div>
         </div>
       </div>
-    </Layout>
+      </Layout>
+    </>
   );
 }
 
