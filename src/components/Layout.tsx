@@ -44,13 +44,13 @@ export default function Layout({ children }: LayoutProps) {
             {/* 导航链接 */}
             <div className="hidden md:flex items-center space-x-8">
               <Link
-                href="/about"
+                href="/"
                 className="text-gray-700 hover:text-blue-600 transition-colors"
               >
                 {t('home')}
               </Link>
               <Link
-                href="/"
+                href="/test"
                 className="text-gray-700 hover:text-blue-600 transition-colors"
               >
                 {t('test')}
@@ -92,13 +92,13 @@ export default function Layout({ children }: LayoutProps) {
         <div className="md:hidden border-t border-gray-200">
           <div className="flex justify-around py-2">
             <Link
-              href="/about"
+              href="/"
               className="flex flex-col items-center py-2 text-gray-600 hover:text-blue-600"
             >
               <span className="text-xs">{t('home')}</span>
             </Link>
             <Link
-              href="/"
+              href="/test"
               className="flex flex-col items-center py-2 text-gray-600 hover:text-blue-600"
             >
               <span className="text-xs">{t('test')}</span>
