@@ -115,3 +115,5 @@ storybook-static
 
 # Sentry
 .sentryclirc
+
+*-cwd

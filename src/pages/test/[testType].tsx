@@ -9,7 +9,7 @@ import MemoryTest from '../../components/tests/MemoryTest';
 import VisualTest from '../../components/tests/VisualTest';
 import TypingTest from '../../components/tests/TypingTest';
 import SequenceTest from '../../components/tests/SequenceTest';
-import { TestType } from '../../lib/supabase';
+import { TestType } from '../../lib/turso';
 
 /**
  * 测试页面组件
