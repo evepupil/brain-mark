@@ -1,4 +1,4 @@
-import { TestType, LeaderboardRecord } from './turso';
+import { TestType, LeaderboardRecord } from './types';
 import { generateFingerprint, generateAnonymousId } from './fingerprint';
 
 // =============================================

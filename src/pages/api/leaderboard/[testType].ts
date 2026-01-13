@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { db, TestType, LeaderboardRecord, parseMetadata } from '@/lib/turso';
+import { getDb, TestType, LeaderboardRecord, parseMetadata } from '@/lib/turso';
 
 // =============================================
 // 排行榜查询 API
@@ -60,6 +60,9 @@ export default async function handler(
     // reaction 测试: 时间越短越好 (ASC)
     // 其他测试: 分数越高越好 (DESC)
     const orderDirection = validTestType === TestType.REACTION ? 'ASC' : 'DESC';
+
+    // 获取数据库客户端
+    const db = getDb();
 
     // 查询排行榜数据
     const rankingsResult = await db.execute({

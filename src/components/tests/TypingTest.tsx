@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { submitScore } from '../../lib/api';
-import { TestType } from '../../lib/turso';
+import { TestType } from '../../lib/types';
 import { delay, shuffleArray, saveBestScore } from '../../lib/utils';
 import ResultEvaluation from '../ResultEvaluation';
 

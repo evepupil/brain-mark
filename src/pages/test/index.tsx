@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Layout from '../../components/Layout';
 import TestCard from '../../components/TestCard';
-import { TestType } from '../../lib/turso';
+import { TestType } from '../../lib/types';
 import SEOHead, { pageSEOConfig } from '../../components/SEOHead';
 
 /**

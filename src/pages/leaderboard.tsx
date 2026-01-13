@@ -6,7 +6,7 @@ import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../components/Layout';
 import { getLeaderboard, getTestStats } from '../lib/api';
-import { TestType, LeaderboardRecord } from '../lib/turso';
+import { TestType, LeaderboardRecord } from '../lib/types';
 import { formatTestResult } from '../lib/utils';
 import SEOHead, { pageSEOConfig } from '../components/SEOHead';
 

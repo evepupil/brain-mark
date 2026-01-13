@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { db, TestType, generateUUID } from '@/lib/turso';
+import { getDb, TestType, generateUUID } from '@/lib/turso';
 
 // =============================================
 // 分数提交 API
@@ -59,6 +59,9 @@ export default async function handler(
 
     // 计算10分钟前的时间 (ISO8601格式)
     const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+
+    // 获取数据库客户端
+    const db = getDb();
 
     // 检查10分钟内是否已提交过分数（防刷机制）
     const recentResult = await db.execute({

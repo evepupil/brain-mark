@@ -2,7 +2,7 @@ import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { TestType } from '../lib/turso';
+import { TestType } from '../lib/types';
 import { cn, getBestScore } from '../lib/utils';
 
 interface TestCardProps {
