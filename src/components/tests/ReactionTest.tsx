@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
@@ -23,16 +23,25 @@ export default function ReactionTest() {
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
 
+  // 用于追踪测试是否被取消（用户点击太早）
+  const testCancelledRef = useRef(false);
+
   /**
    * 开始测试
    */
   const startTest = useCallback(async () => {
+    testCancelledRef.current = false;
     setGameState('ready');
-    
+
     // 随机等待2-5秒
     const waitTime = randomInt(2000, 5000);
     await delay(waitTime);
-    
+
+    // 检查测试是否被取消（用户点击太早）
+    if (testCancelledRef.current) {
+      return;
+    }
+
     setGameState('go');
     setStartTime(Date.now());
   }, []);
@@ -42,7 +51,8 @@ export default function ReactionTest() {
    */
   const handleClick = useCallback(async () => {
     if (gameState === 'ready') {
-      // 太早点击
+      // 太早点击，取消测试
+      testCancelledRef.current = true;
       setGameState('tooEarly');
     } else if (gameState === 'go') {
       // 正确反应

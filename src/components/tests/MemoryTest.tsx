@@ -75,28 +75,28 @@ export default function MemoryTest() {
       setGameState('result');
     } else {
       // 答错了，游戏结束
-      const finalLevel = Math.max(maxLevel, currentLevel - 1);
-      setMaxLevel(finalLevel);
+      // 分数为已完成的最高等级（maxLevel），不是当前等级-1
+      // 因为当前等级还未完成
       setGameState('failed');
-      
+
       // 保存最佳成绩到localStorage
-      if (finalLevel > 0) {
-        const isNewBest = saveBestScore('memory', finalLevel);
+      if (maxLevel > 0) {
+        const isNewBest = saveBestScore('memory', maxLevel);
         if (isNewBest) {
-          console.log('新的最佳记忆测试记录:', finalLevel + '关');
+          console.log('新的最佳记忆测试记录:', maxLevel + '位数字');
         }
       }
-      
+
       // 自动上传分数（只有当达到了一定等级时才上传）
-      if (finalLevel >= 3) {
+      if (maxLevel >= 3) {
         setIsSubmitting(true);
         setSubmissionError(null);
         setSubmissionSuccess(false);
-        
+
         try {
-          await submitScore(TestType.MEMORY, finalLevel, {
+          await submitScore(TestType.MEMORY, maxLevel, {
             timestamp: Date.now(),
-            finalLevel: currentLevel - 1,
+            finalLevel: maxLevel,
           });
           setSubmissionSuccess(true);
         } catch (error: any) {

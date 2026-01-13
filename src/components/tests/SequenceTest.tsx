@@ -100,9 +100,11 @@ export default function SequenceTest() {
 
   /**
    * 开始新一轮测试
+   * @param level 可选的等级参数，不传则使用当前等级
    */
-  const startRound = useCallback(async () => {
-    const newSequence = generateSequence(currentLevel);
+  const startRound = useCallback(async (level?: number) => {
+    const targetLevel = level ?? currentLevel;
+    const newSequence = generateSequence(targetLevel);
     setSequence(newSequence);
     setUserSequence([]);
     initializeGrid();
@@ -178,14 +180,18 @@ export default function SequenceTest() {
    * 继续下一关
    */
   const continueGame = useCallback(() => {
-    setCurrentLevel(prev => prev + 1);
-    
+    // 使用新等级来判断难度增加
+    const newLevel = currentLevel + 1;
+    setCurrentLevel(newLevel);
+
     // 每3关增加一点速度（减少播放时间）
-    if (currentLevel % 3 === 0) {
+    // 使用新等级判断
+    if (newLevel % 3 === 0) {
       setPlaybackSpeed(prev => Math.max(prev - 50, 300));
     }
-    
-    startRound();
+
+    // 传入新等级，避免闭包使用旧值
+    startRound(newLevel);
   }, [currentLevel, startRound]);
 
   /**
@@ -276,7 +282,7 @@ export default function SequenceTest() {
                   观察按钮的闪烁序列，然后按照相同的顺序点击它们
                 </p>
                 <button
-                  onClick={startRound}
+                  onClick={() => startRound()}
                   className="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-indigo-700 transition-colors"
                 >
                   开始测试

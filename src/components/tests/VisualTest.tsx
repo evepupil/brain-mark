@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
@@ -35,6 +35,20 @@ export default function VisualTest() {
   const [maxLevel, setMaxLevel] = useState(0);
   const [mistakes, setMistakes] = useState(0);
   const [lives, setLives] = useState(3); // 生命值
+
+  // 使用 ref 来追踪最新值，避免 setTimeout 闭包捕获陈旧值
+  const livesRef = useRef(lives);
+  const maxLevelRef = useRef(maxLevel);
+  const mistakesRef = useRef(mistakes);
+  const gridSizeRef = useRef(gridSize);
+  const targetCountRef = useRef(targetCount);
+
+  // 同步 ref 和 state
+  useEffect(() => { livesRef.current = lives; }, [lives]);
+  useEffect(() => { maxLevelRef.current = maxLevel; }, [maxLevel]);
+  useEffect(() => { mistakesRef.current = mistakes; }, [mistakes]);
+  useEffect(() => { gridSizeRef.current = gridSize; }, [gridSize]);
+  useEffect(() => { targetCountRef.current = targetCount; }, [targetCount]);
 
   /**
    * 生成网格
@@ -79,7 +93,7 @@ export default function VisualTest() {
    */
   const handleCellClick = useCallback((cellId: number) => {
     if (gameState !== 'input') return;
-    
+
     setGrid(prev => {
       const newGrid = prev.map(cell => {
         if (cell.id === cellId && !cell.isClicked) {
@@ -87,48 +101,55 @@ export default function VisualTest() {
         }
         return cell;
       });
-      
+
       // 检查是否完成
       const clickedTargets = newGrid.filter(cell => cell.isTarget && cell.isClicked).length;
       const clickedNonTargets = newGrid.filter(cell => !cell.isTarget && cell.isClicked).length;
       const totalTargets = newGrid.filter(cell => cell.isTarget).length;
-      
+
       // 如果点击了非目标格子
       if (clickedNonTargets > 0) {
         setMistakes(prev => prev + 1);
         setLives(prev => prev - 1);
-        
+
         // 显示正确答案
         const gridWithResults = newGrid.map(cell => ({
           ...cell,
           isCorrect: cell.isTarget,
         }));
         setGrid(gridWithResults);
-        
+
         setTimeout(async () => {
-          if (lives <= 1) {
+          // 使用 ref 获取最新值，避免闭包陈旧值问题
+          const currentLives = livesRef.current;
+          const currentMaxLevel = maxLevelRef.current;
+          const currentMistakes = mistakesRef.current;
+          const currentGridSize = gridSizeRef.current;
+          const currentTargetCount = targetCountRef.current;
+
+          if (currentLives <= 1) {
             setGameState('failed');
-            
+
             // 保存最佳成绩到localStorage
-            if (maxLevel > 0) {
-              const isNewBest = saveBestScore('visual', maxLevel);
+            if (currentMaxLevel > 0) {
+              const isNewBest = saveBestScore('visual', currentMaxLevel);
               if (isNewBest) {
-                console.log('新的最佳视觉记忆记录:', maxLevel + '关');
+                console.log('新的最佳视觉记忆记录:', currentMaxLevel + '关');
               }
             }
-            
+
             // 自动上传分数（如果达到了一定等级）
-            if (maxLevel >= 3) {
+            if (currentMaxLevel >= 3) {
               setIsSubmitting(true);
               setSubmissionError(null);
               setSubmissionSuccess(false);
-              
+
               try {
-                await submitScore(TestType.VISUAL, maxLevel, {
+                await submitScore(TestType.VISUAL, currentMaxLevel, {
                   timestamp: Date.now(),
-                  mistakes,
-                  finalGridSize: gridSize,
-                  finalTargetCount: targetCount,
+                  mistakes: currentMistakes,
+                  finalGridSize: currentGridSize,
+                  finalTargetCount: currentTargetCount,
                 });
                 setSubmissionSuccess(true);
               } catch (error: any) {
@@ -143,39 +164,41 @@ export default function VisualTest() {
             startRound();
           }
         }, 1500);
-        
+
         return gridWithResults;
       }
-      
+
       // 如果所有目标都被点击
       if (clickedTargets === totalTargets) {
         setMaxLevel(Math.max(maxLevel, currentLevel));
         setGameState('result');
       }
-      
+
       return newGrid;
     });
-  }, [gameState, currentLevel, maxLevel, lives, startRound]);
+  }, [gameState, currentLevel, maxLevel, startRound]);
 
   /**
    * 继续下一关
    */
   const continueGame = useCallback(() => {
-    setCurrentLevel(prev => prev + 1);
-    
-    // 每3关增加网格大小
-    if (currentLevel % 3 === 0) {
+    // 计算新等级
+    const newLevel = currentLevel + 1;
+    setCurrentLevel(newLevel);
+
+    // 每3关增加网格大小（使用新等级判断）
+    if (newLevel % 3 === 0) {
       setGridSize(prev => Math.min(prev + 1, 6));
     }
-    
-    // 每2关增加目标数量
-    if (currentLevel % 2 === 0) {
+
+    // 每2关增加目标数量（使用新等级判断）
+    if (newLevel % 2 === 0) {
       setTargetCount(prev => prev + 1);
     }
-    
+
     // 每关减少显示时间（最少1秒）
     setShowTime(prev => Math.max(prev - 100, 1000));
-    
+
     startRound();
   }, [currentLevel, startRound]);
 

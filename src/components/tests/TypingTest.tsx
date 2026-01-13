@@ -38,6 +38,8 @@ export default function TypingTest() {
   const [timeLeft, setTimeLeft] = useState(60);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  // 防止 finishTest 被多次调用
+  const isFinishingRef = useRef(false);
 
   // 测试文本库
   const textSamples = [
@@ -52,6 +54,8 @@ export default function TypingTest() {
    * 开始测试
    */
   const startTest = useCallback(() => {
+    // 重置防重复调用标志
+    isFinishingRef.current = false;
     const randomText = shuffleArray(textSamples)[0];
     setTestText(randomText);
     setUserInput('');
@@ -99,6 +103,10 @@ export default function TypingTest() {
    * 完成测试
    */
   const finishTest = useCallback(async () => {
+    // 防止重复调用
+    if (isFinishingRef.current) return;
+    isFinishingRef.current = true;
+
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -174,15 +182,11 @@ export default function TypingTest() {
    */
   const handleInputChange = useCallback((value: string) => {
     if (gameState !== 'typing') return;
-    
+
     setUserInput(value);
     setCurrentIndex(value.length);
-    
-    // 如果输入完成
-    if (value.length >= testText.length) {
-      finishTest();
-    }
-  }, [gameState, testText.length, finishTest]);
+    // 注意：完成检测由 useEffect 处理，避免双重触发
+  }, [gameState]);
 
   /**
    * 重新开始测试
@@ -192,6 +196,8 @@ export default function TypingTest() {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
+    // 重置防重复调用标志
+    isFinishingRef.current = false;
     setSubmissionError(null);
     setSubmissionSuccess(false);
     setGameState('start');
