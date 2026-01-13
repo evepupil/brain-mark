@@ -51,12 +51,31 @@
     "copyright": "© 2025 Brain Mark. Made by Yetong for cognitive testing."
   },
   "aboutPage": {
-    "title": "About bm.chaosyn",
-    "greeting": "Hello! I'm the creator of bm.chaosyn.",
+    "title": "About Brain Mark",
+    "subtitle": "A free, science-based brain training platform",
+    "whoAmI": "About Me",
+    "greeting": "Hello! I'm the creator of Brain Mark.",
     "introduction": "I created this website because I was frustrated with finding high-quality brain training games that were constantly blocked by paywalls and cluttered, tedious website experiences. I believe everyone should have free access to these tools without being stopped by payment barriers.",
-    "mission": "Every game here is backed by science—such as working memory training, attention exercises, and processing speed challenges. I've carefully designed them to be both effective and enjoyable. Whether you're a student looking to improve focus, an adult concerned about memory health, or simply someone interested in brain training, I believe you'll find games that suit you.",
+    "cognitiveScience": "Cognitive Science",
+    "cognitiveDescription": "Designing scientifically effective training programs based on cognitive psychology research",
+    "programming": "Technology",
+    "programmingDescription": "Building smooth user experiences with modern web technologies",
+    "mission": "Our Mission",
+    "missionDescription": "Every game here is backed by science—such as working memory training, attention exercises, and processing speed challenges. I've carefully designed them to be both effective and enjoyable. Whether you're a student looking to improve focus, an adult concerned about memory health, or simply someone interested in brain training, I believe you'll find games that suit you.",
+    "gamification": "Gamification",
+    "gamificationDesc": "Transforming boring cognitive training into fun gaming experiences",
+    "dataScience": "Progress Tracking",
+    "dataScienceDesc": "Record your progress and witness your growth with data",
+    "openSource": "Completely Free",
+    "openSourceDesc": "All features are permanently free, no ads, no paywalls",
+    "vision": "Vision",
+    "visionDescription": "I hope these games can help you and that you enjoy them. There's no pressure here—feel free to choose games that interest you and enjoy the process. Even playing for just a few minutes each day is a beneficial mental exercise.",
+    "startTesting": "Start Testing",
+    "viewLeaderboard": "View Leaderboard",
+    "contact": "Contact Us",
+    "contactDescription": "If you have any feedback or suggestions, I'd love to hear from you.",
+    "contactMethod": "Email Address",
     "hope": "I hope these games can help you and that you enjoy them. There's no pressure here—feel free to choose games that interest you and enjoy the process. Even playing for just a few minutes each day is a beneficial mental exercise.",
-    "feedback": "If you have any feedback or suggestions, I'd love to hear from you.",
-    "contact": "Contact: contact@bm.chaosyn.com"
+    "feedback": "If you have any feedback or suggestions, I'd love to hear from you."
   }
 }
