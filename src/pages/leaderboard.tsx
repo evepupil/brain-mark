@@ -80,6 +80,13 @@ export default function Leaderboard() {
       color: 'bg-red-500',
       unit: '分',
     },
+    {
+      type: TestType.STROOP,
+      name: '斯特鲁普效应',
+      icon: '🎨',
+      color: 'bg-purple-500',
+      unit: '分',
+    },
   ];
 
   /**

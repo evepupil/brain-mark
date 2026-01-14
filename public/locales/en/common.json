@@ -57,6 +57,12 @@
       "description": "Test your hand-eye coordination",
       "unit": "points",
       "instruction": "Click the targets as fast as you can"
+    },
+    "stroop": {
+      "name": "Stroop Effect",
+      "description": "Test your selective attention and cognitive control",
+      "unit": "points",
+      "instruction": "Select the display color of the word, not its meaning"
     }
   },
   "footer": {

@@ -53,6 +53,11 @@ export default function TestPage() {
       icon: '🎯',
       color: 'from-red-400 to-pink-500',
     },
+    {
+      type: TestType.STROOP,
+      icon: '🎨',
+      color: 'from-purple-400 to-pink-500',
+    },
   ];
 
   return (

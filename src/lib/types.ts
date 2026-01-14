@@ -23,6 +23,7 @@ export enum TestType {
   SEQUENCE = 'sequence',   // 序列记忆测试
   CHIMP = 'chimp',         // 黑猩猩测试
   AIM = 'aim',             // 瞄准训练测试
+  STROOP = 'stroop',       // 斯特鲁普效应测试
 }
 
 // =============================================

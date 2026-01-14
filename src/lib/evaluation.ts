@@ -105,6 +105,16 @@ const AIM_THRESHOLDS: LevelThresholds = {
   [EvaluationLevel.EXPERT]: Infinity
 };
 
+// 斯特鲁普效应测试阈值 (分数，越大越好)
+const STROOP_THRESHOLDS: LevelThresholds = {
+  [EvaluationLevel.BEGINNER]: 40,
+  [EvaluationLevel.BELOW_AVERAGE]: 60,
+  [EvaluationLevel.AVERAGE]: 80,
+  [EvaluationLevel.ABOVE_AVERAGE]: 100,
+  [EvaluationLevel.EXCELLENT]: 130,
+  [EvaluationLevel.EXPERT]: Infinity
+};
+
 // 等级信息配置
 const LEVEL_INFO = {
   [EvaluationLevel.BEGINNER]: {
@@ -184,6 +194,9 @@ export function evaluateScore(testType: string, score: number): EvaluationResult
       break;
     case 'aim':
       thresholds = AIM_THRESHOLDS;
+      break;
+    case 'stroop':
+      thresholds = STROOP_THRESHOLDS;
       break;
     default:
       throw new Error(`未知的测试类型: ${testType}`);
@@ -378,6 +391,14 @@ function getDescription(testType: string, level: EvaluationLevel, score: number)
       [EvaluationLevel.AVERAGE]: `${score}分是正常的瞄准水平。`,
       [EvaluationLevel.BELOW_AVERAGE]: `${score}分还有提升空间，多加练习。`,
       [EvaluationLevel.BEGINNER]: `${score}分是个不错的开始，继续努力！`
+    },
+    stroop: {
+      [EvaluationLevel.EXPERT]: `${score}分的认知控制能力达到专家级！`,
+      [EvaluationLevel.EXCELLENT]: `${score}分是优秀的表现，抗干扰能力很强。`,
+      [EvaluationLevel.ABOVE_AVERAGE]: `${score}分高于平均水平，注意力控制不错。`,
+      [EvaluationLevel.AVERAGE]: `${score}分是正常的认知控制水平。`,
+      [EvaluationLevel.BELOW_AVERAGE]: `${score}分还有提升空间。`,
+      [EvaluationLevel.BEGINNER]: `${score}分是个开始，继续练习！`
     }
   };
   
@@ -447,6 +468,14 @@ function getSuggestion(testType: string, level: EvaluationLevel): string {
       [EvaluationLevel.AVERAGE]: '可以通过瞄准训练游戏来提升精准度和速度。',
       [EvaluationLevel.BELOW_AVERAGE]: '建议调整鼠标灵敏度，找到适合自己的设置。',
       [EvaluationLevel.BEGINNER]: '多练习鼠标控制，先追求准确再提升速度。'
+    },
+    stroop: {
+      [EvaluationLevel.EXPERT]: '卓越的认知控制能力！你的抗干扰能力非常强。',
+      [EvaluationLevel.EXCELLENT]: '优秀的选择性注意力，继续保持。',
+      [EvaluationLevel.ABOVE_AVERAGE]: '不错的认知灵活性，可以通过更多练习提升。',
+      [EvaluationLevel.AVERAGE]: '可以通过冥想和专注力训练来提升。',
+      [EvaluationLevel.BELOW_AVERAGE]: '建议放慢速度，先确保准确再提升速度。',
+      [EvaluationLevel.BEGINNER]: '多练习，专注于颜色而非文字含义。'
     }
   };
   

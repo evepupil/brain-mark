@@ -57,6 +57,12 @@
       "description": "测试你的手眼协调能力",
       "unit": "分",
       "instruction": "尽快点击出现的目标"
+    },
+    "stroop": {
+      "name": "斯特鲁普效应",
+      "description": "测试你的选择性注意力和认知控制能力",
+      "unit": "分",
+      "instruction": "选择文字的显示颜色，而非词义"
     }
   },
   "footer": {

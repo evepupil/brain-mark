@@ -40,13 +40,28 @@ export default function Home() {
       title: '序列记忆测试',
       description: '记住并重复点击序列，挑战你的序列记忆能力。',
     },
+    {
+      icon: '🐵',
+      title: '黑猩猩测试',
+      description: '基于京都大学实验，测试你的视觉短期记忆能力，挑战黑猩猩的记忆水平。',
+    },
+    {
+      icon: '🎯',
+      title: '瞄准训练',
+      description: '测试你的手眼协调能力和鼠标控制精准度，提升反应速度。',
+    },
+    {
+      icon: '🎨',
+      title: '斯特鲁普效应',
+      description: '经典认知心理学测试，测量你的选择性注意力和认知控制能力。',
+    },
   ];
 
   const stats = [
     {
-      number: '5',
+      number: '8',
       label: '测试项目',
-      description: '涵盖反应、记忆、视觉等多个维度',
+      description: '涵盖反应、记忆、注意力等多个维度',
     },
     {
       number: '∞',
