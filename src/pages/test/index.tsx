@@ -43,6 +43,11 @@ export default function TestPage() {
       icon: '🔢',
       color: 'from-indigo-400 to-purple-500',
     },
+    {
+      type: TestType.CHIMP,
+      icon: '🐵',
+      color: 'from-amber-400 to-orange-500',
+    },
   ];
 
   return (

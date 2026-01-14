@@ -45,6 +45,12 @@
       "description": "Test your sequence memory",
       "unit": "level",
       "instruction": "Click the squares in the order they light up"
+    },
+    "chimp": {
+      "name": "Chimp Test",
+      "description": "Test your visual short-term memory",
+      "unit": "numbers",
+      "instruction": "Remember number positions and click in order"
     }
   },
   "footer": {

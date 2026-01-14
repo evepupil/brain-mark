@@ -66,6 +66,13 @@ export default function Leaderboard() {
       color: 'bg-indigo-500',
       unit: '等级',
     },
+    {
+      type: TestType.CHIMP,
+      name: '黑猩猩测试',
+      icon: '🐵',
+      color: 'bg-amber-500',
+      unit: '个数字',
+    },
   ];
 
   /**

@@ -85,6 +85,16 @@ const SEQUENCE_THRESHOLDS: LevelThresholds = {
   [EvaluationLevel.EXPERT]: Infinity
 };
 
+// 黑猩猩测试阈值 (数字数量，越大越好)
+const CHIMP_THRESHOLDS: LevelThresholds = {
+  [EvaluationLevel.BEGINNER]: 4,
+  [EvaluationLevel.BELOW_AVERAGE]: 6,
+  [EvaluationLevel.AVERAGE]: 8,
+  [EvaluationLevel.ABOVE_AVERAGE]: 10,
+  [EvaluationLevel.EXCELLENT]: 12,
+  [EvaluationLevel.EXPERT]: Infinity
+};
+
 // 等级信息配置
 const LEVEL_INFO = {
   [EvaluationLevel.BEGINNER]: {
@@ -158,6 +168,9 @@ export function evaluateScore(testType: string, score: number): EvaluationResult
       break;
     case 'sequence':
       thresholds = SEQUENCE_THRESHOLDS;
+      break;
+    case 'chimp':
+      thresholds = CHIMP_THRESHOLDS;
       break;
     default:
       throw new Error(`未知的测试类型: ${testType}`);
@@ -336,6 +349,14 @@ function getDescription(testType: string, level: EvaluationLevel, score: number)
       [EvaluationLevel.AVERAGE]: `${score}关是正常的序列记忆水平。`,
       [EvaluationLevel.BELOW_AVERAGE]: `${score}关的表现可以继续提升。`,
       [EvaluationLevel.BEGINNER]: `${score}关是个好的开始。`
+    },
+    chimp: {
+      [EvaluationLevel.EXPERT]: `记住${score}个数字的位置，你的视觉短期记忆超越了黑猩猩！`,
+      [EvaluationLevel.EXCELLENT]: `${score}个数字是优秀的表现，接近黑猩猩的水平。`,
+      [EvaluationLevel.ABOVE_AVERAGE]: `记住${score}个数字，视觉记忆能力不错。`,
+      [EvaluationLevel.AVERAGE]: `${score}个数字是正常的视觉短期记忆水平。`,
+      [EvaluationLevel.BELOW_AVERAGE]: `${score}个数字的表现还有提升空间。`,
+      [EvaluationLevel.BEGINNER]: `${score}个数字是个好的开始，继续练习！`
     }
   };
   
@@ -389,6 +410,14 @@ function getSuggestion(testType: string, level: EvaluationLevel): string {
       [EvaluationLevel.AVERAGE]: '可以通过序列记忆游戏来提升工作记忆。',
       [EvaluationLevel.BELOW_AVERAGE]: '建议多做工作记忆训练，提高注意力集中度。',
       [EvaluationLevel.BEGINNER]: '从短序列开始练习，逐步增加长度和复杂度。'
+    },
+    chimp: {
+      [EvaluationLevel.EXPERT]: '惊人的视觉短期记忆！你已经超越了大多数黑猩猩。',
+      [EvaluationLevel.EXCELLENT]: '优秀的表现，继续挑战更高难度。',
+      [EvaluationLevel.ABOVE_AVERAGE]: '不错的视觉记忆，可以通过更多练习提升。',
+      [EvaluationLevel.AVERAGE]: '可以尝试在看到数字时快速形成空间记忆。',
+      [EvaluationLevel.BELOW_AVERAGE]: '建议先专注于记住数字的相对位置，而非绝对位置。',
+      [EvaluationLevel.BEGINNER]: '从较少的数字开始，逐步增加挑战难度。'
     }
   };
   

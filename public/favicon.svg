@@ -1,4 +1,27 @@
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="32" height="32" fill="#0A0B0D"/>
-<path d="M26.6677 23.7149H8.38057V20.6496H5.33301V8.38159H26.6677V23.7149ZM8.38057 20.6496H23.6201V11.4482H8.38057V20.6496ZM16.0011 16.0021L13.8461 18.1705L11.6913 16.0021L13.8461 13.8337L16.0011 16.0021ZM22.0963 16.0008L19.9414 18.1691L17.7865 16.0008L19.9414 13.8324L22.0963 16.0008Z" fill="#32F08C"/>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 定义渐变色 -->
+  <defs>
+    <linearGradient id="brain_gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" /> <!-- Indigo -->
+      <stop offset="100%" style="stop-color:#9333EA;stop-opacity:1" /> <!-- Purple -->
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景圆：承载渐变色 -->
+  <circle cx="256" cy="256" r="256" fill="url(#brain_gradient)"/>
+  
+  <!-- 核心图形：大脑与对勾的融合 (白色) -->
+  <g transform="translate(106, 106) scale(0.6)">
+    <!-- 大脑外轮廓：使用流畅的曲线 -->
+    <path d="M250 0C160 0 100 50 80 120C30 140 0 190 0 250C0 350 80 430 180 430C200 430 220 425 240 420C270 470 340 480 390 450C440 420 460 360 440 310C480 280 500 230 500 180C500 80 420 0 320 0L250 0Z" 
+          fill="white" fill-opacity="0.2"/>
+    
+    <!-- 核心对勾 (The Checkmark) -->
+    <path d="M140 250 L220 330 L380 150" 
+          stroke="white" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          
+    <!-- 脑回纹路细节 (补充对勾周围的纹理，增强大脑特征) -->
+    <path d="M100 180 C100 120 150 80 220 80 M350 100 C400 120 420 180 400 240 M200 400 C150 380 120 320 130 260" 
+          stroke="white" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.9"/>
+  </g>
 </svg>

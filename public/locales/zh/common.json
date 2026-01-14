@@ -45,6 +45,12 @@
       "description": "测试你的序列记忆能力",
       "unit": "关卡",
       "instruction": "按顺序点击亮起的方块"
+    },
+    "chimp": {
+      "name": "黑猩猩测试",
+      "description": "测试你的视觉短期记忆能力",
+      "unit": "个数字",
+      "instruction": "记住数字位置，按顺序点击"
     }
   },
   "footer": {

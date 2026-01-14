@@ -35,9 +35,10 @@ export default function Layout({ children }: LayoutProps) {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="text-2xl font-bold text-gray-900"
+                className="flex items-center space-x-2"
               >
-                🧠 Brain Mark
+                <img src="/favicon.svg" alt="Brain Mark" className="w-8 h-8" />
+                <span className="text-2xl font-bold text-gray-900">Brain Mark</span>
               </motion.div>
             </Link>
 
