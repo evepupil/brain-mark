@@ -44,6 +44,8 @@ export function formatTestResult(testType: string, result: number): string {
       return `${result} WPM`;
     case 'chimp':
       return `${result}个数字`;
+    case 'aim':
+      return `${result}分`;
     default:
       return result.toString();
   }
@@ -74,6 +76,10 @@ export function getResultColor(testType: string, result: number): string {
     case 'chimp':
       if (result >= 10) return 'text-green-600';
       if (result >= 6) return 'text-yellow-600';
+      return 'text-red-600';
+    case 'aim':
+      if (result >= 100) return 'text-green-600';
+      if (result >= 60) return 'text-yellow-600';
       return 'text-red-600';
     default:
       return 'text-gray-600';
@@ -128,6 +134,7 @@ export interface BestScores {
   sequence?: BestScore;
   typing?: BestScore;
   chimp?: BestScore;
+  aim?: BestScore;
 }
 
 const BEST_SCORES_KEY = 'brain-mark-best-scores';
@@ -217,6 +224,7 @@ export function isScoreBetter(testType: string, newScore: number, currentBest?: 
     case 'sequence':
     case 'typing':
     case 'chimp':
+    case 'aim':
       // 其他测试：越大越好
       return newScore > currentBest;
     default:

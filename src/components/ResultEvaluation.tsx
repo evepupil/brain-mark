@@ -132,6 +132,24 @@ function getTestInfo(testType: string) {
         good: { range: '9-11个', description: '接近黑猩猩的平均水平' },
         average: { range: '6-8个', description: '典型的人类视觉短期记忆' }
       }
+    },
+    // 瞄准训练测试信息
+    aim: {
+      title: '瞄准训练测试',
+      description: '瞄准训练测试评估您的手眼协调能力和鼠标控制精准度。这项测试广泛用于电竞选手训练和神经运动能力评估。',
+      howItWorks: '屏幕上会随机出现红色目标，您需要尽快点击它们。测试记录您的反应时间和准确率，综合计算最终分数。共有30个目标需要点击。',
+      factors: '瞄准能力受手眼协调、鼠标灵敏度设置、显示器刷新率和练习程度影响。疲劳和分心会降低表现。职业电竞选手通常在这类测试中表现出色。',
+      tips: [
+        { title: '调整灵敏度', content: '找到适合自己的鼠标灵敏度设置，太快或太慢都会影响精准度。' },
+        { title: '手腕稳定', content: '保持手腕稳定，使用手臂进行大范围移动，手腕进行微调。' },
+        { title: '预判位置', content: '不要等目标完全出现再移动，尝试预判并快速反应。' },
+        { title: '保持放松', content: '紧张会导致肌肉僵硬，保持放松状态能提高精准度。' }
+      ],
+      benchmarks: {
+        excellent: { range: '120分以上', description: '电竞选手级别的瞄准能力' },
+        good: { range: '80-119分', description: '优秀的手眼协调能力' },
+        average: { range: '50-79分', description: '标准的瞄准水平' }
+      }
     }
   };
   

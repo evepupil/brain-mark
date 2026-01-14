@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
@@ -73,6 +73,13 @@ export default function Leaderboard() {
       color: 'bg-amber-500',
       unit: '个数字',
     },
+    {
+      type: TestType.AIM,
+      name: '瞄准训练',
+      icon: '🎯',
+      color: 'bg-red-500',
+      unit: '分',
+    },
   ];
 
   /**
@@ -96,14 +103,6 @@ export default function Leaderboard() {
     } finally {
       setLoading(false);
     }
-  };
-
-  /**
-   * 处理测试类型切换
-   */
-  const handleTestChange = (testType: TestType) => {
-    setSelectedTest(testType);
-    router.push(`/leaderboard?test=${testType}`, undefined, { shallow: true });
   };
 
   /**
@@ -137,23 +136,37 @@ export default function Leaderboard() {
     });
   };
 
-  /**
-   * 初始化页面
-   */
-  useEffect(() => {
-    // 从URL参数获取测试类型
-    const testParam = router.query.test as string;
-    if (testParam && Object.values(TestType).includes(testParam as TestType)) {
-      setSelectedTest(testParam as TestType);
-    }
-  }, [router.query.test]);
+  // 使用 ref 跟踪是否已初始化
+  const initializedRef = useRef(false);
 
   /**
-   * 加载数据
+   * 初始化：从 URL 参数设置测试类型并加载数据
    */
   useEffect(() => {
-    loadLeaderboard(selectedTest);
-  }, [selectedTest]);
+    if (!router.isReady) return;
+
+    // 只在首次初始化时处理 URL 参数
+    if (!initializedRef.current) {
+      initializedRef.current = true;
+      const testParam = router.query.test as string;
+      if (testParam && Object.values(TestType).includes(testParam as TestType)) {
+        setSelectedTest(testParam as TestType);
+        loadLeaderboard(testParam as TestType);
+      } else {
+        loadLeaderboard(selectedTest);
+      }
+    }
+  }, [router.isReady]);
+
+  /**
+   * 用户手动切换测试类型时加载数据
+   */
+  const handleTestChange = (testType: TestType) => {
+    if (testType === selectedTest) return;
+    setSelectedTest(testType);
+    loadLeaderboard(testType);
+    router.push(`/leaderboard?test=${testType}`, undefined, { shallow: true });
+  };
 
   const currentTestConfig = testTypes.find(t => t.type === selectedTest);
 

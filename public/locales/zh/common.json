@@ -51,6 +51,12 @@
       "description": "测试你的视觉短期记忆能力",
       "unit": "个数字",
       "instruction": "记住数字位置，按顺序点击"
+    },
+    "aim": {
+      "name": "瞄准训练",
+      "description": "测试你的手眼协调能力",
+      "unit": "分",
+      "instruction": "尽快点击出现的目标"
     }
   },
   "footer": {

@@ -48,6 +48,11 @@ export default function TestPage() {
       icon: '🐵',
       color: 'from-amber-400 to-orange-500',
     },
+    {
+      type: TestType.AIM,
+      icon: '🎯',
+      color: 'from-red-400 to-pink-500',
+    },
   ];
 
   return (

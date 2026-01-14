@@ -1,0 +1,20 @@
+# robots.txt for bm.chaosyn.com
+
+User-agent: *
+Allow: /
+
+# 允许所有搜索引擎爬取
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+# 禁止爬取API路由
+Disallow: /api/
+
+# 站点地图
+Sitemap: https://bm.chaosyn.com/sitemap.xml

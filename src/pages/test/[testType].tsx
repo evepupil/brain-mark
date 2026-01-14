@@ -10,6 +10,7 @@ import VisualTest from '../../components/tests/VisualTest';
 import TypingTest from '../../components/tests/TypingTest';
 import SequenceTest from '../../components/tests/SequenceTest';
 import ChimpTest from '../../components/tests/ChimpTest';
+import AimTest from '../../components/tests/AimTest';
 import { TestType } from '../../lib/types';
 
 /**
@@ -38,6 +39,8 @@ export default function TestPage() {
         return <SequenceTest />;
       case TestType.CHIMP:
         return <ChimpTest />;
+      case TestType.AIM:
+        return <AimTest />;
       default:
         return (
           <div className="text-center py-12">

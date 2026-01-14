@@ -95,6 +95,16 @@ const CHIMP_THRESHOLDS: LevelThresholds = {
   [EvaluationLevel.EXPERT]: Infinity
 };
 
+// 瞄准训练测试阈值 (分数，越大越好)
+const AIM_THRESHOLDS: LevelThresholds = {
+  [EvaluationLevel.BEGINNER]: 30,
+  [EvaluationLevel.BELOW_AVERAGE]: 50,
+  [EvaluationLevel.AVERAGE]: 70,
+  [EvaluationLevel.ABOVE_AVERAGE]: 90,
+  [EvaluationLevel.EXCELLENT]: 120,
+  [EvaluationLevel.EXPERT]: Infinity
+};
+
 // 等级信息配置
 const LEVEL_INFO = {
   [EvaluationLevel.BEGINNER]: {
@@ -171,6 +181,9 @@ export function evaluateScore(testType: string, score: number): EvaluationResult
       break;
     case 'chimp':
       thresholds = CHIMP_THRESHOLDS;
+      break;
+    case 'aim':
+      thresholds = AIM_THRESHOLDS;
       break;
     default:
       throw new Error(`未知的测试类型: ${testType}`);
@@ -357,6 +370,14 @@ function getDescription(testType: string, level: EvaluationLevel, score: number)
       [EvaluationLevel.AVERAGE]: `${score}个数字是正常的视觉短期记忆水平。`,
       [EvaluationLevel.BELOW_AVERAGE]: `${score}个数字的表现还有提升空间。`,
       [EvaluationLevel.BEGINNER]: `${score}个数字是个好的开始，继续练习！`
+    },
+    aim: {
+      [EvaluationLevel.EXPERT]: `${score}分的瞄准能力达到专家级！你的手眼协调能力超群。`,
+      [EvaluationLevel.EXCELLENT]: `${score}分是优秀的瞄准表现，反应快且精准。`,
+      [EvaluationLevel.ABOVE_AVERAGE]: `${score}分高于平均水平，瞄准能力不错。`,
+      [EvaluationLevel.AVERAGE]: `${score}分是正常的瞄准水平。`,
+      [EvaluationLevel.BELOW_AVERAGE]: `${score}分还有提升空间，多加练习。`,
+      [EvaluationLevel.BEGINNER]: `${score}分是个不错的开始，继续努力！`
     }
   };
   
@@ -418,6 +439,14 @@ function getSuggestion(testType: string, level: EvaluationLevel): string {
       [EvaluationLevel.AVERAGE]: '可以尝试在看到数字时快速形成空间记忆。',
       [EvaluationLevel.BELOW_AVERAGE]: '建议先专注于记住数字的相对位置，而非绝对位置。',
       [EvaluationLevel.BEGINNER]: '从较少的数字开始，逐步增加挑战难度。'
+    },
+    aim: {
+      [EvaluationLevel.EXPERT]: '卓越的瞄准能力！可以尝试更小的目标或更快的节奏。',
+      [EvaluationLevel.EXCELLENT]: '优秀的手眼协调，继续保持这种水平。',
+      [EvaluationLevel.ABOVE_AVERAGE]: '不错的瞄准能力，可以通过FPS游戏继续提升。',
+      [EvaluationLevel.AVERAGE]: '可以通过瞄准训练游戏来提升精准度和速度。',
+      [EvaluationLevel.BELOW_AVERAGE]: '建议调整鼠标灵敏度，找到适合自己的设置。',
+      [EvaluationLevel.BEGINNER]: '多练习鼠标控制，先追求准确再提升速度。'
     }
   };
   

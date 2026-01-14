@@ -22,6 +22,7 @@ export enum TestType {
   TYPING = 'typing',       // 打字速度测试
   SEQUENCE = 'sequence',   // 序列记忆测试
   CHIMP = 'chimp',         // 黑猩猩测试
+  AIM = 'aim',             // 瞄准训练测试
 }
 
 // =============================================

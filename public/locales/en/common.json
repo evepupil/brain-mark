@@ -51,6 +51,12 @@
       "description": "Test your visual short-term memory",
       "unit": "numbers",
       "instruction": "Remember number positions and click in order"
+    },
+    "aim": {
+      "name": "Aim Trainer",
+      "description": "Test your hand-eye coordination",
+      "unit": "points",
+      "instruction": "Click the targets as fast as you can"
     }
   },
   "footer": {
