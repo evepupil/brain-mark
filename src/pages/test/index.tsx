@@ -58,6 +58,11 @@ export default function TestPage() {
       icon: '🎨',
       color: 'from-purple-400 to-pink-500',
     },
+    {
+      type: TestType.SCHULTE,
+      icon: '🔲',
+      color: 'from-cyan-400 to-blue-500',
+    },
   ];
 
   return (

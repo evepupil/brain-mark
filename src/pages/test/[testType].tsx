@@ -12,6 +12,7 @@ import SequenceTest from '../../components/tests/SequenceTest';
 import ChimpTest from '../../components/tests/ChimpTest';
 import AimTest from '../../components/tests/AimTest';
 import StroopTest from '../../components/tests/StroopTest';
+import SchulteTest from '../../components/tests/SchulteTest';
 import { TestType } from '../../lib/types';
 
 /**
@@ -44,6 +45,8 @@ export default function TestPage() {
         return <AimTest />;
       case TestType.STROOP:
         return <StroopTest />;
+      case TestType.SCHULTE:
+        return <SchulteTest />;
       default:
         return (
           <div className="text-center py-12">

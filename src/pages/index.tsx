@@ -55,11 +55,16 @@ export default function Home() {
       title: '斯特鲁普效应',
       description: '经典认知心理学测试，测量你的选择性注意力和认知控制能力。',
     },
+    {
+      icon: '🔲',
+      title: '舒尔特方格',
+      description: '测试你的注意力和视觉搜索速度，按顺序点击方格中的数字。',
+    },
   ];
 
   const stats = [
     {
-      number: '8',
+      number: '9',
       label: '测试项目',
       description: '涵盖反应、记忆、注意力等多个维度',
     },

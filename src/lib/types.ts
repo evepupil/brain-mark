@@ -24,6 +24,7 @@ export enum TestType {
   CHIMP = 'chimp',         // 黑猩猩测试
   AIM = 'aim',             // 瞄准训练测试
   STROOP = 'stroop',       // 斯特鲁普效应测试
+  SCHULTE = 'schulte',     // 舒尔特方格测试
 }
 
 // =============================================
