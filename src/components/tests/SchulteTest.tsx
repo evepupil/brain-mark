@@ -145,10 +145,7 @@ export default function SchulteTest() {
       return `${baseClass} bg-red-500 text-white animate-pulse`;
     }
 
-    if (number === currentTarget) {
-      return `${baseClass} bg-blue-50 text-blue-600 hover:bg-blue-100 border-2 border-blue-400 shadow-lg`;
-    }
-
+    // 所有未点击的数字样式一致，不高亮当前目标
     return `${baseClass} bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg`;
   };
 

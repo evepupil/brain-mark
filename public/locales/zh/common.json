@@ -63,6 +63,12 @@
       "description": "测试你的选择性注意力和认知控制能力",
       "unit": "分",
       "instruction": "选择文字的显示颜色，而非词义"
+    },
+    "schulte": {
+      "name": "舒尔特方格",
+      "description": "测试你的注意力和视觉搜索能力",
+      "unit": "秒",
+      "instruction": "按顺序点击数字1到25"
     }
   },
   "footer": {

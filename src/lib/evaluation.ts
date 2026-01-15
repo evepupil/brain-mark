@@ -115,6 +115,16 @@ const STROOP_THRESHOLDS: LevelThresholds = {
   [EvaluationLevel.EXPERT]: Infinity
 };
 
+// 舒尔特方格测试阈值 (毫秒，越小越好，基于5x5标准方格)
+const SCHULTE_THRESHOLDS: LevelThresholds = {
+  [EvaluationLevel.EXPERT]: 25000,
+  [EvaluationLevel.EXCELLENT]: 35000,
+  [EvaluationLevel.ABOVE_AVERAGE]: 45000,
+  [EvaluationLevel.AVERAGE]: 60000,
+  [EvaluationLevel.BELOW_AVERAGE]: 80000,
+  [EvaluationLevel.BEGINNER]: Infinity
+};
+
 // 等级信息配置
 const LEVEL_INFO = {
   [EvaluationLevel.BEGINNER]: {
@@ -197,6 +207,10 @@ export function evaluateScore(testType: string, score: number): EvaluationResult
       break;
     case 'stroop':
       thresholds = STROOP_THRESHOLDS;
+      break;
+    case 'schulte':
+      thresholds = SCHULTE_THRESHOLDS;
+      isHigherBetter = false; // 舒尔特方格时间越短越好
       break;
     default:
       throw new Error(`未知的测试类型: ${testType}`);
@@ -399,6 +413,14 @@ function getDescription(testType: string, level: EvaluationLevel, score: number)
       [EvaluationLevel.AVERAGE]: `${score}分是正常的认知控制水平。`,
       [EvaluationLevel.BELOW_AVERAGE]: `${score}分还有提升空间。`,
       [EvaluationLevel.BEGINNER]: `${score}分是个开始，继续练习！`
+    },
+    schulte: {
+      [EvaluationLevel.EXPERT]: `${(score/1000).toFixed(1)}秒完成舒尔特方格，你的注意力和视觉搜索能力达到专家级！`,
+      [EvaluationLevel.EXCELLENT]: `${(score/1000).toFixed(1)}秒是优秀的表现，注意力集中能力很强。`,
+      [EvaluationLevel.ABOVE_AVERAGE]: `${(score/1000).toFixed(1)}秒高于平均水平，视觉搜索能力不错。`,
+      [EvaluationLevel.AVERAGE]: `${(score/1000).toFixed(1)}秒是正常的舒尔特方格完成时间。`,
+      [EvaluationLevel.BELOW_AVERAGE]: `${(score/1000).toFixed(1)}秒还有提升空间，多加练习。`,
+      [EvaluationLevel.BEGINNER]: `${(score/1000).toFixed(1)}秒是个开始，继续努力！`
     }
   };
   
@@ -476,6 +498,14 @@ function getSuggestion(testType: string, level: EvaluationLevel): string {
       [EvaluationLevel.AVERAGE]: '可以通过冥想和专注力训练来提升。',
       [EvaluationLevel.BELOW_AVERAGE]: '建议放慢速度，先确保准确再提升速度。',
       [EvaluationLevel.BEGINNER]: '多练习，专注于颜色而非文字含义。'
+    },
+    schulte: {
+      [EvaluationLevel.EXPERT]: '卓越的注意力和视觉搜索能力！可以尝试更大的方格挑战。',
+      [EvaluationLevel.EXCELLENT]: '优秀的表现，你的注意力分配能力很强。',
+      [EvaluationLevel.ABOVE_AVERAGE]: '不错的视觉搜索速度，继续练习可以更快。',
+      [EvaluationLevel.AVERAGE]: '可以通过每天练习来提升注意力集中度。',
+      [EvaluationLevel.BELOW_AVERAGE]: '建议从小方格开始练习，逐步提高难度。',
+      [EvaluationLevel.BEGINNER]: '多练习舒尔特方格，可以显著提升注意力和阅读速度。'
     }
   };
   
