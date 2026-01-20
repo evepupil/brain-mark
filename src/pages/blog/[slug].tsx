@@ -17,12 +17,40 @@ interface BlogPostPageProps {
 export default function BlogPostPage({ post }: BlogPostPageProps) {
   const { t } = useTranslation('common');
 
+  const articleStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.description,
+    "author": {
+      "@type": "Person",
+      "name": post.author || "Brain Mark Team"
+    },
+    "datePublished": post.date,
+    "dateModified": post.date,
+    "publisher": {
+      "@type": "Organization",
+      "name": "Brain Mark",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://bm.chaosyn.com/favicon.svg"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://bm.chaosyn.com/blog/${post.slug}`
+    },
+    "keywords": post.tags?.join(', ')
+  };
+
   return (
     <>
       <SEOHead
         title={`${post.title} - Brain Mark`}
         description={post.description}
         keywords={post.tags?.join(',') || ''}
+        type="article"
+        structuredData={articleStructuredData}
       />
       <Layout>
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-12">
