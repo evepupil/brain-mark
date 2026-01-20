@@ -63,6 +63,12 @@ export default function Layout({ children }: LayoutProps) {
                 {t('leaderboard')}
               </Link>
               <Link
+                href="/blog"
+                className="text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                {t('blog')}
+              </Link>
+              <Link
                 href="/about"
                 className="text-gray-700 hover:text-blue-600 transition-colors"
               >
@@ -109,6 +115,12 @@ export default function Layout({ children }: LayoutProps) {
               className="flex flex-col items-center py-2 text-gray-600 hover:text-blue-600"
             >
               <span className="text-xs">{t('leaderboard')}</span>
+            </Link>
+            <Link
+              href="/blog"
+              className="flex flex-col items-center py-2 text-gray-600 hover:text-blue-600"
+            >
+              <span className="text-xs">{t('blog')}</span>
             </Link>
             <Link
               href="/about"
