@@ -1,147 +1,124 @@
-import { ReactNode } from 'react';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
+import { ReactNode, useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+import { Menu, X } from 'lucide-react';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-/**
- * 页面布局组件
- * 提供导航栏、语言切换和页面容器
- */
+interface NavigationItem {
+  href: string;
+  label: string;
+  practice?: boolean;
+}
+
 export default function Layout({ children }: LayoutProps) {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const { locale, locales, asPath } = router;
+  const { locale, locales, asPath, pathname } = router;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  /**
-   * 切换语言
-   */
+  const navigation: NavigationItem[] = [
+    { href: '/', label: t('home') },
+    { href: '/test', label: t('test') },
+    { href: '/leaderboard', label: t('leaderboard') },
+    { href: '/blog', label: t('blog') },
+    { href: '/about', label: t('about') },
+    { href: '/practice', label: t('practice'), practice: true },
+  ];
+
   const switchLanguage = (newLocale: string) => {
-    router.push(asPath, asPath, { locale: newLocale });
+    void router.push(asPath, asPath, { locale: newLocale });
   };
 
+  const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname.startsWith(href);
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* 导航栏 */}
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center space-x-2"
-              >
-                <img src="/favicon.svg" alt="Brain Mark" className="w-8 h-8" />
-                <span className="text-2xl font-bold text-gray-900">Brain Mark</span>
-              </motion.div>
-            </Link>
+    <div className="site-frame">
+      <header className="site-header">
+        <div className="shell header-row">
+          <Link className="brand" href="/" aria-label="Brain Mark 首页">
+            <img src="/favicon.svg" alt="" />
+            <span>Brain Mark</span>
+          </Link>
 
-            {/* 导航链接 */}
-            <div className="hidden md:flex items-center space-x-8">
+          <nav
+            className={`main-nav ${isMenuOpen ? 'is-open' : ''}`}
+            aria-label={locale === 'en' ? 'Main navigation' : '主导航'}
+          >
+            {navigation.map((item) => (
               <Link
-                href="/"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
+                key={item.href}
+                href={item.href}
+                className={item.practice ? 'nav-practice' : undefined}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+                onClick={() => setIsMenuOpen(false)}
               >
-                {t('home')}
+                {item.label}
               </Link>
-              <Link
-                href="/test"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                {t('test')}
-              </Link>
-              <Link
-                href="/leaderboard"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                {t('leaderboard')}
-              </Link>
-              <Link
-                href="/blog"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                {t('blog')}
-              </Link>
-              <Link
-                href="/about"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                {t('about')}
-              </Link>
-            </div>
+            ))}
+          </nav>
 
-            {/* 语言切换 */}
-            <div className="flex items-center space-x-2">
-              {locales?.map((loc) => (
+          <div className="header-tools">
+            <div className="language-switch" aria-label={t('language')}>
+              {locales?.map((itemLocale) => (
                 <button
-                  key={loc}
-                  onClick={() => switchLanguage(loc)}
-                  className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                    locale === loc
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
+                  key={itemLocale}
+                  type="button"
+                  aria-pressed={locale === itemLocale}
+                  onClick={() => switchLanguage(itemLocale)}
                 >
-                  {loc === 'zh' ? '中文' : 'EN'}
+                  {itemLocale === 'zh' ? '中' : 'EN'}
                 </button>
               ))}
             </div>
+            <button
+              className="menu-button"
+              type="button"
+              aria-label={isMenuOpen ? '关闭导航菜单' : '打开导航菜单'}
+              aria-expanded={isMenuOpen}
+              onClick={() => setIsMenuOpen((open) => !open)}
+            >
+              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
         </div>
+      </header>
 
-        {/* 移动端导航 */}
-        <div className="md:hidden border-t border-gray-200">
-          <div className="flex justify-around py-2">
-            <Link
-              href="/"
-              className="flex flex-col items-center py-2 text-gray-600 hover:text-blue-600"
-            >
-              <span className="text-xs">{t('home')}</span>
-            </Link>
-            <Link
-              href="/test"
-              className="flex flex-col items-center py-2 text-gray-600 hover:text-blue-600"
-            >
-              <span className="text-xs">{t('test')}</span>
-            </Link>
-            <Link
-              href="/leaderboard"
-              className="flex flex-col items-center py-2 text-gray-600 hover:text-blue-600"
-            >
-              <span className="text-xs">{t('leaderboard')}</span>
-            </Link>
-            <Link
-              href="/blog"
-              className="flex flex-col items-center py-2 text-gray-600 hover:text-blue-600"
-            >
-              <span className="text-xs">{t('blog')}</span>
-            </Link>
-            <Link
-              href="/about"
-              className="flex flex-col items-center py-2 text-gray-600 hover:text-blue-600"
-            >
-              <span className="text-xs">{t('about')}</span>
-            </Link>
+      <main className="site-main">{children}</main>
+
+      <footer className="site-footer">
+        <div className="shell">
+          <div className="footer-grid">
+            <div>
+              <div className="footer-brand">
+                <img src="/favicon.svg" alt="" />
+                Brain Mark
+              </div>
+              <p className="footer-note">
+                {locale === 'en'
+                  ? 'Measure and understand cognitive performance. Results are for entertainment and self-observation.'
+                  : '测试和了解人类认知表现。结果用于娱乐与自我观察，不构成医学建议。'}
+              </p>
+            </div>
+            <div className="footer-links">
+              <strong>{locale === 'en' ? 'Product' : '产品'}</strong>
+              <Link href="/test">{t('test')}</Link>
+              <Link href="/leaderboard">{t('leaderboard')}</Link>
+              <Link href="/practice">{t('practice')}</Link>
+            </div>
+            <div className="footer-links">
+              <strong>{locale === 'en' ? 'Learn' : '了解'}</strong>
+              <Link href="/blog">{t('blog')}</Link>
+              <Link href="/about">{t('about')}</Link>
+            </div>
           </div>
-        </div>
-      </nav>
-
-      {/* 主要内容 */}
-      <main>{children}</main>
-
-      {/* 页脚 */}
-      <footer className="bg-gray-50 border-t border-gray-200">
-        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-          <div className="text-center text-gray-600">
-            <p className="text-sm">
-              {t('footer.copyright')}
-            </p>
+          <div className="footer-base">
+            <span>{t('footer.copyright')}</span>
+            <span>{locale === 'en' ? 'Anonymous by default' : '默认匿名 · 无需注册'}</span>
           </div>
         </div>
       </footer>

@@ -3,6 +3,7 @@ import { appWithTranslation } from 'next-i18next';
 import { Analytics } from '@vercel/analytics/next';
 import Head from 'next/head';
 import '../index.css';
+import '../styles/brain-mark.css';
 
 /**
  * Next.js应用程序根组件

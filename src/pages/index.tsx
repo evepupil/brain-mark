@@ -1,371 +1,131 @@
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
-import { motion } from 'framer-motion';
 import { GetStaticProps } from 'next';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../components/Layout';
+import QuickReactionDemo from '../components/QuickReactionDemo';
 import SEOHead, { pageSEOConfig } from '../components/SEOHead';
+import { getLeaderboard, getTestStats } from '../lib/api';
+import { LeaderboardRecord, TestType } from '../lib/types';
 
-/**
- * 关于页面组件
- * 介绍Human Benchmark项目的信息和使用说明
- */
+interface FeaturedTest {
+  type: TestType;
+  categoryZh: string;
+  categoryEn: string;
+  titleZh: string;
+  titleEn: string;
+  descriptionZh: string;
+  descriptionEn: string;
+  visual: string;
+  visualContent?: string;
+}
+
+const featuredTests: FeaturedTest[] = [
+  { type: TestType.REACTION, categoryZh: '反应', categoryEn: 'Reaction', titleZh: '反应速度', titleEn: 'Reaction Time', descriptionZh: '看到信号后立即点击', descriptionEn: 'Click as soon as the signal appears', visual: 'visual-reaction' },
+  { type: TestType.MEMORY, categoryZh: '记忆', categoryEn: 'Memory', titleZh: '数字记忆', titleEn: 'Number Memory', descriptionZh: '记住越来越长的数字', descriptionEn: 'Remember increasingly long numbers', visual: 'visual-number', visualContent: '739' },
+  { type: TestType.VISUAL, categoryZh: '记忆', categoryEn: 'Memory', titleZh: '视觉记忆', titleEn: 'Visual Memory', descriptionZh: '复现亮起的方格位置', descriptionEn: 'Recall highlighted grid positions', visual: 'visual-grid' },
+  { type: TestType.TYPING, categoryZh: '速度', categoryEn: 'Speed', titleZh: '打字速度', titleEn: 'Typing Speed', descriptionZh: '测量输入速度与准确率', descriptionEn: 'Measure typing speed and accuracy', visual: 'visual-type', visualContent: 'type|' },
+  { type: TestType.STROOP, categoryZh: '注意', categoryEn: 'Attention', titleZh: '斯特鲁普测试', titleEn: 'Stroop Test', descriptionZh: '在干扰中识别真实颜色', descriptionEn: 'Identify colors under interference', visual: 'visual-stroop', visualContent: '红' },
+  { type: TestType.SCHULTE, categoryZh: '注意', categoryEn: 'Attention', titleZh: '舒尔特方格', titleEn: 'Schulte Grid', descriptionZh: '按顺序找到所有数字', descriptionEn: 'Find every number in order', visual: 'visual-schulte' },
+];
+
+function TestVisual({ type, className, content }: { type: TestType; className: string; content?: string }) {
+  if (type === TestType.VISUAL) {
+    return <div className={`test-tile__visual ${className}`} aria-hidden="true">{Array.from({ length: 9 }, (_, index) => <i key={index} />)}</div>;
+  }
+  if (type === TestType.SCHULTE) {
+    return <div className={`test-tile__visual ${className}`} aria-hidden="true">{[7, 2, 9, 1, 5, 3, 8, 4, 6].map((value) => <i key={value}>{value}</i>)}</div>;
+  }
+  return <div className={`test-tile__visual ${className}`} aria-hidden="true">{content}</div>;
+}
+
 export default function Home() {
-  const { t } = useTranslation('common');
-  const router = useRouter();
+  const { locale } = useRouter();
+  const isEnglish = locale === 'en';
+  const [reactionRankings, setReactionRankings] = useState<LeaderboardRecord[]>([]);
+  const [reactionStats, setReactionStats] = useState<{ averageScore: number; bestScore: number; totalPlayers: number } | null>(null);
 
-  const features = [
-    {
-      icon: '⚡',
-      title: '反应速度测试',
-      description: '测试你的反应时间，看看你能多快响应视觉刺激。平均反应时间约为200-300毫秒。',
-    },
-    {
-      icon: '🧠',
-      title: '数字记忆测试',
-      description: '挑战你的短期记忆能力，记住并输入越来越长的数字序列。',
-    },
-    {
-      icon: '👁️',
-      title: '视觉记忆测试',
-      description: '测试你的视觉记忆能力，记住网格中高亮方块的位置。',
-    },
-    {
-      icon: '⌨️',
-      title: '打字速度测试',
-      description: '测试你的打字速度和准确率，以每分钟字数(WPM)为单位计算。',
-    },
-    {
-      icon: '🔢',
-      title: '序列记忆测试',
-      description: '记住并重复点击序列，挑战你的序列记忆能力。',
-    },
-    {
-      icon: '🐵',
-      title: '黑猩猩测试',
-      description: '基于京都大学实验，测试你的视觉短期记忆能力，挑战黑猩猩的记忆水平。',
-    },
-    {
-      icon: '🎯',
-      title: '瞄准训练',
-      description: '测试你的手眼协调能力和鼠标控制精准度，提升反应速度。',
-    },
-    {
-      icon: '🎨',
-      title: '斯特鲁普效应',
-      description: '经典认知心理学测试，测量你的选择性注意力和认知控制能力。',
-    },
-    {
-      icon: '🔲',
-      title: '舒尔特方格',
-      description: '测试你的注意力和视觉搜索速度，按顺序点击方格中的数字。',
-    },
-  ];
+  useEffect(() => {
+    let isActive = true;
 
-  const stats = [
-    {
-      number: '9',
-      label: '测试项目',
-      description: '涵盖反应、记忆、注意力等多个维度',
-    },
-    {
-      number: '∞',
-      label: '无限挑战',
-      description: '每个测试都有无限的提升空间',
-    },
-    {
-      number: '100%',
-      label: '免费使用',
-      description: '完全免费，无需注册即可开始测试',
-    },
-  ];
+    Promise.all([
+      getLeaderboard(TestType.REACTION, 3),
+      getTestStats(TestType.REACTION),
+    ]).then(([rankings, stats]) => {
+      if (!isActive) return;
+      setReactionRankings(rankings);
+      setReactionStats(stats);
+    }).catch((error: unknown) => {
+      console.error('Failed to load the homepage benchmark', error);
+    });
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
+  const hasReactionStats = Boolean(reactionStats?.totalPlayers);
 
   return (
     <>
-      <SEOHead
-        title={pageSEOConfig.home.title}
-        description={pageSEOConfig.home.description}
-        keywords={pageSEOConfig.home.keywords}
-      />
+      <SEOHead title={pageSEOConfig.home.title} description={pageSEOConfig.home.description} keywords={pageSEOConfig.home.keywords} />
       <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-        {/* Hero Section */}
-        <div className="relative overflow-hidden bg-white">
-          <div className="max-w-6xl mx-auto px-4 py-16">
-            <div className="text-center">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-5xl font-bold text-gray-900 mb-6"
-              >
-                关于 Brain Mark
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-xl text-gray-600 max-w-3xl mx-auto mb-8"
-              >
-                Brain Mark 是一个测试和训练人类认知能力的在线平台。
-                通过科学设计的测试项目，帮助你了解自己的反应速度、记忆能力和认知水平。
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="flex justify-center space-x-4"
-              >
-                <button
-                  onClick={() => router.push('/test')}
-                  className="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-                >
-                  开始测试
-                </button>
-                <button
-                  onClick={() => router.push('/leaderboard')}
-                  className="bg-gray-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors"
-                >
-                  查看排行榜
-                </button>
-              </motion.div>
-            </div>
-          </div>
-        </div>
+        <div className="notice-bar"><div className="shell notice-row"><span className="notice-dot" /><span>{isEnglish ? '9 tests · No sign-up · Instant results' : '9 项测试 · 无需注册 · 完成后立即获得结果'}</span></div></div>
 
-        {/* Stats Section */}
-        <div className="py-16 bg-gray-50">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="text-center bg-white rounded-2xl p-8 shadow-lg"
-                >
-                  <div className="text-4xl font-bold text-blue-600 mb-2">
-                    {stat.number}
-                  </div>
-                  <div className="text-xl font-semibold text-gray-900 mb-2">
-                    {stat.label}
-                  </div>
-                  <div className="text-gray-600">
-                    {stat.description}
-                  </div>
-                </motion.div>
+        <section className="hero">
+          <div className="shell hero-grid">
+            <div>
+              <p className="eyebrow">Human performance, made visible</p>
+              <h1>{isEnglish ? 'How fast do you ' : '你的反应速度，'}<span>{isEnglish ? 'really react?' : '到底有多快？'}</span></h1>
+              <p className="hero-copy">{isEnglish ? 'Measure reaction, memory, attention and coordination in minutes. Every test comes with clear rules, instant results and an anonymous ranking.' : '用几分钟测量反应、记忆、注意力和手眼协调能力。每项测试都有清晰规则、即时结果和匿名排名。'}</p>
+              <div className="hero-actions"><Link className="button button--primary" href="/test">{isEnglish ? 'Choose a test' : '选择一项测试'} <span aria-hidden="true">→</span></Link><Link className="button button--secondary" href="/leaderboard">{isEnglish ? 'View leaderboard' : '查看排行榜'}</Link></div>
+              <div className="trust-line"><span><i />{isEnglish ? 'Anonymous' : '全程匿名'}</span><span><i />{isEnglish ? 'Stored locally' : '成绩保存在本机'}</span><span><i />{isEnglish ? 'Chinese and English' : '支持中英文'}</span></div>
+            </div>
+            <QuickReactionDemo locale={locale} siteAverage={hasReactionStats ? reactionStats?.averageScore : null} />
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="shell">
+            <div className="section-head"><div><p className="eyebrow">Test library</p><h2>{isEnglish ? 'Choose from 9 tests' : '从 9 项测试中选择'}</h2><p>{isEnglish ? 'Each test measures one specific ability. Read the rules, then enter its dedicated test page.' : '每一项只测一个明确能力。先了解规则，再进入独立测试页面。'}</p></div><Link className="text-link" href="/test">{isEnglish ? 'See all tests' : '查看全部项目'} →</Link></div>
+            <div className="test-strip">
+              {featuredTests.map((test, index) => (
+                <Link className="test-tile" href={`/test/${test.type}`} key={test.type}>
+                  <div className="test-tile__top"><span className="test-tile__num">{String(index + 1).padStart(2, '0')} / {isEnglish ? test.categoryEn : test.categoryZh}</span><span className="test-tile__arrow">→</span></div>
+                  <h3>{isEnglish ? test.titleEn : test.titleZh}</h3><p>{isEnglish ? test.descriptionEn : test.descriptionZh}</p>
+                  <TestVisual type={test.type} className={test.visual} content={test.visualContent} />
+                </Link>
               ))}
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Features Section */}
-        <div className="py-16">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                测试项目介绍
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                我们提供多种科学设计的认知能力测试，帮助你全面了解自己的能力水平。
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {features.map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow"
-                >
-                  <div className="text-4xl mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {feature.description}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* How it Works Section */}
-        <div className="py-16 bg-gray-50">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                如何使用
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                简单三步，开始你的认知能力测试之旅。
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-center"
-              >
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-blue-600">1</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  选择测试
-                </h3>
-                <p className="text-gray-600">
-                  从测试页面选择你想要挑战的测试项目
-                </p>
-              </motion.div>
-              
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-center"
-              >
-                <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-green-600">2</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  开始挑战
-                </h3>
-                <p className="text-gray-600">
-                  按照指示完成测试，尽你所能发挥最佳水平
-                </p>
-              </motion.div>
-              
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-center"
-              >
-                <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-purple-600">3</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  查看结果
-                </h3>
-                <p className="text-gray-600">
-                  获得详细的测试结果和排名，了解你的能力水平
-                </p>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-
-        {/* Privacy Section */}
-        <div className="py-16">
-          <div className="max-w-4xl mx-auto px-4">
-            <div className="bg-white rounded-2xl p-8 shadow-lg">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-                隐私保护
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                    🔒 匿名测试
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    我们不收集任何个人身份信息。所有测试结果都以匿名方式存储和显示。
-                  </p>
-                  
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                    🛡️ 数据安全
-                  </h3>
-                  <p className="text-gray-600">
-                    我们使用先进的加密技术保护你的数据，确保信息安全。
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                    🚫 防刷机制
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    为了保证排行榜的公平性，我们实施了10分钟防刷机制。
-                  </p>
-                  
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                    📊 透明统计
-                  </h3>
-                  <p className="text-gray-600">
-                    所有统计数据都是真实的，基于用户的实际测试结果。
-                  </p>
+        <section className="section section--ink">
+          <div className="shell">
+            <div className="section-head"><div><p className="eyebrow">Live benchmark</p><h2>{isEnglish ? 'See how everyone scored' : '看看大家测到了多少'}</h2><p>{isEnglish ? 'Scores use anonymous identifiers. Each test only accepts one ranked submission every 10 minutes.' : '成绩以匿名标识参与排名。同一项目 10 分钟内只记录一次，减少重复提交。'}</p></div><Link className="text-link" href="/leaderboard">{isEnglish ? 'Full leaderboard' : '完整排行榜'} →</Link></div>
+            <div className="proof-grid">
+              <div>
+                <div className="score-callout"><strong>{hasReactionStats ? Math.round(reactionStats?.bestScore ?? 0) : '—'}</strong><span>{hasReactionStats ? 'ms' : ''}<br />{isEnglish ? 'fastest reaction score' : '当前反应速度最快成绩'}</span></div>
+                <div className="rank-list">
+                  {reactionRankings.length > 0 ? reactionRankings.map((record, index) => (
+                    <div className="rank-row" key={record.id}>
+                      <span>#{String(index + 1).padStart(2, '0')}</span>
+                      <span>anon·{record.anonymous_id.slice(-4).toUpperCase()}</span>
+                      <strong>{Math.round(record.result)} ms</strong>
+                    </div>
+                  )) : (
+                    <div className="rank-row"><span>--</span><span>{isEnglish ? 'No ranked scores yet' : '暂无有效排名'}</span><strong>—</strong></div>
+                  )}
                 </div>
               </div>
-              
-              {/* GitHub Link Section */}
-              <div className="mt-8 pt-8 border-t border-gray-200">
-                <div className="text-center">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                    🔗 开源项目
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    Brain Mark 是一个开源项目，欢迎查看源代码、提出建议或参与贡献。
-                  </p>
-                  <a
-                    href="https://github.com/evepupil/brain-mark"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-2 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors shadow-lg"
-                  >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clipRule="evenodd" />
-                    </svg>
-                    <span>查看 GitHub 仓库</span>
-                  </a>
-                </div>
-              </div>
+              <aside className="proof-note"><h3>{isEnglish ? 'How should you read a result?' : '结果怎么理解？'}</h3><p>{isEnglish ? 'Device latency, attention and fatigue all affect a single score. We show the raw result, a reference range and an anonymous percentile without presenting it as a medical conclusion.' : '一次成绩会受到设备、注意力和疲劳影响。页面会同时展示原始成绩、参考区间与匿名百分位，避免把单次结果包装成医学结论。'}</p><Link className="button button--light" href="/about">{isEnglish ? 'Learn our principles' : '了解测试原则'}</Link></aside>
             </div>
           </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="py-16 bg-gradient-to-r from-blue-600 to-purple-600">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-3xl font-bold text-white mb-4"
-            >
-              准备好挑战自己了吗？
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-xl text-blue-100 mb-8"
-            >
-              立即开始测试，发现你的认知潜能！
-            </motion.p>
-            <motion.button
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              onClick={() => router.push('/test')}
-              className="bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg"
-            >
-              开始测试 🚀
-            </motion.button>
-          </div>
-        </div>
-      </div>
+        </section>
       </Layout>
     </>
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ?? 'zh', ['common'])),
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({ props: { ...(await serverSideTranslations(locale ?? 'zh', ['common'])) } });

@@ -3,6 +3,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import Link from 'next/link';
 import Layout from '../../components/Layout';
 import ReactionTest from '../../components/tests/ReactionTest';
 import MemoryTest from '../../components/tests/MemoryTest';
@@ -15,18 +16,25 @@ import StroopTest from '../../components/tests/StroopTest';
 import SchulteTest from '../../components/tests/SchulteTest';
 import { TestType } from '../../lib/types';
 
-/**
- * 测试页面组件
- * 根据测试类型渲染对应的测试组件
- */
-export default function TestPage() {
-  const { t } = useTranslation('common');
-  const router = useRouter();
-  const { testType } = router.query;
+const testDetails: Record<TestType, { icon: string; duration: string }> = {
+  [TestType.REACTION]: { icon: '\u26a1', duration: '30s' },
+  [TestType.MEMORY]: { icon: '\ud83e\udde0', duration: '2 min' },
+  [TestType.VISUAL]: { icon: '\ud83d\udc41\ufe0f', duration: '3 min' },
+  [TestType.TYPING]: { icon: '\u2328\ufe0f', duration: '1 min' },
+  [TestType.SEQUENCE]: { icon: '\ud83d\udd22', duration: '3 min' },
+  [TestType.CHIMP]: { icon: '\ud83d\udc12', duration: '3 min' },
+  [TestType.AIM]: { icon: '\ud83c\udfaf', duration: '1 min' },
+  [TestType.STROOP]: { icon: '\ud83c\udfa8', duration: '2 min' },
+  [TestType.SCHULTE]: { icon: '\ud83d\udd33', duration: '2 min' },
+};
 
-  /**
-   * 根据测试类型渲染对应的测试组件
-   */
+export default function TestPage() {
+  const { t, i18n } = useTranslation('common');
+  const router = useRouter();
+  const testType = router.query.testType as TestType | undefined;
+  const detail = testType ? testDetails[testType] : undefined;
+  const isEnglish = i18n.language.startsWith('en');
+
   const renderTest = () => {
     switch (testType) {
       case TestType.REACTION:
@@ -49,13 +57,9 @@ export default function TestPage() {
         return <SchulteTest />;
       default:
         return (
-          <div className="text-center py-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              {t('error')}
-            </h2>
-            <p className="text-gray-600">
-              未知的测试类型: {testType}
-            </p>
+          <div className="detail-stage__error">
+            <h2>{t('error')}</h2>
+            <p>Unknown test type: {router.query.testType}</p>
           </div>
         );
     }
@@ -64,34 +68,36 @@ export default function TestPage() {
   return (
     <Layout>
       <Head>
-        <title>
-          {testType && t(`tests.${testType}.name`)} - {t('title')}
-        </title>
+        <title>{testType && t(`tests.${testType}.name`)} - {t('title')}</title>
         <meta
           name="description"
           content={testType ? t(`tests.${testType}.description`) : t('description')}
         />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-        {renderTest()}
-      </div>
+      {detail && testType && (
+        <section className="test-context">
+          <div className="shell test-context__row">
+            <div className="test-context__identity">
+              <div className="detail-icon" aria-hidden="true">{detail.icon}</div>
+              <div><p className="eyebrow">{isEnglish ? `Formal test / ${detail.duration}` : `正式测试 / ${detail.duration.replace('min', '分钟').replace('s', '秒')}`}</p><h1 id="detail-title">{t(`tests.${testType}.name`)}</h1><p>{t(`tests.${testType}.description`)}</p></div>
+            </div>
+            <div className="test-context__note"><strong>{isEnglish ? 'Before you start' : '开始前'}</strong><span>{isEnglish ? 'Keep this tab visible and follow the on-screen instructions. Your best score is saved in this browser.' : '保持此页面在前台并按照画面提示完成测试。最佳成绩会保存在当前浏览器。'}</span></div>
+            <Link className="text-link" href="/test">← {isEnglish ? 'All tests' : '全部测试'}</Link>
+          </div>
+        </section>
+      )}
+      <div className="test-runtime">{renderTest()}</div>
     </Layout>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-  locale,
-  params,
-}) => {
-  const testType = params?.testType as string;
-  
-  // 验证测试类型是否有效
+export const getServerSideProps: GetServerSideProps = async ({ locale, params }) => {
+  const testType = params?.testType;
   const validTestTypes = Object.values(TestType);
-  if (!validTestTypes.includes(testType as TestType)) {
-    return {
-      notFound: true,
-    };
+
+  if (typeof testType !== 'string' || !validTestTypes.includes(testType as TestType)) {
+    return { notFound: true };
   }
 
   return {

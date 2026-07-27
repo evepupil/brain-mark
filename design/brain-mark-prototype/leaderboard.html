@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Brain Mark 匿名排行榜原型"><title>排行榜 - Brain Mark</title><link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="site-header"><div class="shell header-row"><a class="brand" href="index.html"><img src="../../public/favicon.svg" alt=""><span>Brain Mark</span></a><nav class="main-nav" aria-label="主导航"><a href="index.html">首页</a><a href="tests.html">测试项目</a><a href="leaderboard.html" aria-current="page">排行榜</a><a href="blog.html">文章</a><a href="about.html">关于</a><a class="nav-practice" href="practice.html">练习模式</a></nav><div class="header-tools"><button class="language" type="button" data-toast="原型暂未接入语言切换">中 / EN</button><button class="menu-button" type="button" aria-expanded="false" aria-label="打开导航菜单">☰</button></div></div></header>
+
+  <main>
+    <section class="page-intro"><div class="shell page-intro__row"><div><p class="eyebrow">Anonymous ranking</p><h1 class="page-title">排行榜</h1><p class="page-lede">选择测试项目，查看近期匿名成绩。不同测试的计分方式不同，页面会明确标注“越高越好”或“越低越好”。</p></div><div class="page-index">#01</div></div></section>
+    <section class="leaderboard-layout"><div class="shell">
+      <div class="leaderboard-summary"><div class="summary-stat"><span>当前项目</span><strong>反应速度</strong></div><div class="summary-stat"><span>平均成绩</span><strong>247 ms</strong></div><div class="summary-stat"><span>有效样本</span><strong>1,284</strong></div></div>
+      <div class="leaderboard-tabs" role="tablist" aria-label="测试排行榜"><button class="leaderboard-tab" type="button" role="tab" aria-selected="true" data-rank-tab="reaction">反应速度</button><button class="leaderboard-tab" type="button" role="tab" aria-selected="false" data-rank-tab="number">数字记忆</button><button class="leaderboard-tab" type="button" role="tab" aria-selected="false" data-rank-tab="typing">打字速度</button><button class="leaderboard-tab" type="button" role="tab" aria-selected="false" data-toast="完整版本会包含全部 9 项排行榜">更多项目</button></div>
+      <table class="leaderboard-table"><thead><tr><th>排名</th><th>匿名用户</th><th>提交时间</th><th>成绩</th></tr></thead><tbody data-rank-rows></tbody></table>
+      <p class="mode-banner"><strong>公平规则：</strong>同一浏览器指纹在同一测试中，10 分钟内只接受一次有效成绩。异常成绩会被自动标记。</p>
+    </div></section>
+  </main>
+
+  <footer class="site-footer"><div class="shell"><div class="footer-grid"><div><div class="footer-brand"><img src="../../public/favicon.svg" alt="">Brain Mark</div><p class="footer-note">排行榜仅使用匿名标识，不展示个人身份信息。</p></div><div class="footer-links"><strong>产品</strong><a href="tests.html">测试项目</a><a href="practice.html">练习模式</a></div><div class="footer-links"><strong>了解</strong><a href="blog.html">文章</a><a href="about.html">关于项目</a></div></div><div class="footer-base"><span>Brain Mark · 排行榜原型</span><span>当前使用演示数据</span></div></div></footer>
+  <div class="toast" role="status" aria-live="polite"></div><script src="app.js"></script>
+</body>
+</html>

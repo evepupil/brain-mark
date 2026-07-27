@@ -27,6 +27,12 @@ const staticPages = [
     lastmod: new Date().toISOString().split('T')[0]
   },
   {
+    url: '/practice',
+    changefreq: 'monthly',
+    priority: '0.6',
+    lastmod: new Date().toISOString().split('T')[0]
+  },
+  {
     url: '/about',
     changefreq: 'monthly',
     priority: '0.7',

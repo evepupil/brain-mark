@@ -1,254 +1,67 @@
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
-import { motion } from 'framer-motion';
 import { GetStaticProps } from 'next';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../components/Layout';
-import SEOHead, { pageSEOConfig } from '../components/SEOHead';
+import SEOHead from '../components/SEOHead';
 
-/**
- * 新的关于页面组件
- * 包含站长自我介绍和emoji
- */
+const copy = {
+  zh: {
+    title: '把人的认知表现，变成容易理解的结果。',
+    lede: 'Brain Mark 是一个开源认知测试网站，为中文用户提供简单、匿名、可比较的在线测试。',
+    mission: '测试应当清楚、克制，也足够有趣。',
+    missionBody: '每项测试只回答一个明确问题：你的反应有多快、能记住多长的数字、能否在干扰中保持注意。页面会展示结果和参考范围，同时说明设备、环境与状态带来的误差。',
+    principles: [
+      ['匿名', '无需注册即可完成测试；排行榜只显示匿名标识。'],
+      ['透明', '计分方向、参考范围和提交限制都会在页面中说明。'],
+      ['边界', '结果用于娱乐和自我观察，不代替专业认知或医学评估。'],
+      ['开放', '项目源代码公开，欢迎提交建议与改进。'],
+    ],
+    cta: '准备好测一项了吗？',
+    ctaBody: '从反应速度开始通常只需要半分钟。',
+    ctaButton: '查看测试项目',
+    contact: '联系与共建',
+    contactBody: '欢迎提出问题、反馈测试体验，或从源代码参与项目改进。',
+    email: '联系邮箱',
+  },
+  en: {
+    title: 'Turn cognitive performance into results you can understand.',
+    lede: 'Brain Mark is an open-source cognitive testing website with simple, anonymous and comparable online tests.',
+    mission: 'A test should be clear, restrained and still enjoyable.',
+    missionBody: 'Each test answers one focused question: how fast you react, how many digits you remember, or how well you handle interference. Results include a reference range and the limits introduced by devices, environment and state.',
+    principles: [
+      ['Anonymous', 'Complete tests without an account; rankings only show an anonymous identifier.'],
+      ['Transparent', 'Scoring direction, reference ranges and submission limits are explained.'],
+      ['Bounded', 'Results are for entertainment and self-observation, not medical assessment.'],
+      ['Open', 'The source code is public and contributions are welcome.'],
+    ],
+    cta: 'Ready to measure something?',
+    ctaBody: 'Reaction time usually takes less than a minute.',
+    ctaButton: 'Browse tests',
+    contact: 'Contact and contribute',
+    contactBody: 'Report a problem, share feedback or help improve the open-source project.',
+    email: 'Email',
+  },
+} as const;
+
 export default function About() {
-  const { t } = useTranslation('common');
-  const router = useRouter();
+  const { locale } = useRouter();
+  const page = locale === 'en' ? copy.en : copy.zh;
 
   return (
     <>
-      <SEOHead
-        title={pageSEOConfig.about.title}
-        description={pageSEOConfig.about.description}
-        keywords={pageSEOConfig.about.keywords}
-      />
+      <SEOHead title={locale === 'en' ? 'About Brain Mark' : '关于 Brain Mark'} description={page.lede} keywords={locale === 'en' ? 'Brain Mark,cognitive test,open source' : '关于 Brain Mark,开源认知测试,认知能力测试'} />
       <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-        {/* Hero Section */}
-        <div className="relative overflow-hidden bg-white">
-          <div className="max-w-4xl mx-auto px-4 py-16">
-            <div className="text-center">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                className="text-8xl mb-6"
-              >
-                🧠💡
-              </motion.div>
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-4xl font-bold text-gray-900 mb-6"
-              >
-                {t('aboutPage.title')}
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-xl text-gray-600 max-w-2xl mx-auto mb-8"
-              >
-                {t('aboutPage.subtitle')}
-              </motion.p>
-            </div>
-          </div>
-        </div>
+        <section className="page-intro"><div className="shell page-intro__row"><div><p className="eyebrow">About Brain Mark</p><h1 className="page-title">{page.title}</h1><p className="page-lede">{page.lede}</p></div><div className="page-index" aria-hidden="true">BM</div></div></section>
 
-        {/* About Me Section */}
-        <div className="py-16">
-          <div className="max-w-4xl mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-white rounded-3xl p-8 shadow-xl"
-            >
-              <div className="text-center mb-8">
-                <div className="text-6xl mb-4">👨‍💻🔬</div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                  {t('aboutPage.whoAmI')}
-                </h2>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  {t('aboutPage.introduction')}
-                </p>
-              </div>
+        <section className="about-grid shell"><div className="about-mark"><img src="/favicon.svg" alt="Brain Mark" /></div><div className="about-copy"><p className="eyebrow">Project mission</p><h2>{page.mission}</h2><p>{page.missionBody}</p><ul className="principles">{page.principles.map(([name, description]) => <li key={name}><strong>{name}</strong><span>{description}</span></li>)}</ul></div></section>
 
-              {/* Interests Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.6 }}
-                  className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6"
-                >
-                  <div className="text-4xl mb-3">🧠🔬</div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {t('aboutPage.cognitiveScience')}
-                  </h3>
-                  <p className="text-gray-600">
-                    {t('aboutPage.cognitiveDescription')}
-                  </p>
-                </motion.div>
+        <section className="section section--white"><div className="shell section-head"><div><p className="eyebrow">Get started</p><h2>{page.cta}</h2><p>{page.ctaBody}</p></div><Link className="button button--primary" href="/test">{page.ctaButton} →</Link></div></section>
 
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.7 }}
-                  className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6"
-                >
-                  <div className="text-4xl mb-3">💻⚡</div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {t('aboutPage.programming')}
-                  </h3>
-                  <p className="text-gray-600">
-                    {t('aboutPage.programmingDescription')}
-                  </p>
-                </motion.div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Mission Section */}
-        <div className="py-16 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="text-center"
-            >
-              <div className="text-6xl mb-6">🎯🚀</div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                {t('aboutPage.mission')}
-              </h2>
-              <p className="text-lg text-gray-600 leading-relaxed max-w-3xl mx-auto mb-8">
-                {t('aboutPage.missionDescription')}
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.9 }}
-                  className="bg-white rounded-2xl p-6 shadow-lg"
-                >
-                  <div className="text-4xl mb-4">🎮🧪</div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    {t('aboutPage.gamification')}
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    {t('aboutPage.gamificationDesc')}
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.0 }}
-                  className="bg-white rounded-2xl p-6 shadow-lg"
-                >
-                  <div className="text-4xl mb-4">📊📈</div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    {t('aboutPage.dataScience')}
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    {t('aboutPage.dataScienceDesc')}
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.1 }}
-                  className="bg-white rounded-2xl p-6 shadow-lg"
-                >
-                  <div className="text-4xl mb-4">🌐💡</div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    {t('aboutPage.openSource')}
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    {t('aboutPage.openSourceDesc')}
-                  </p>
-                </motion.div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Vision Section */}
-        <div className="py-16">
-          <div className="max-w-4xl mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2 }}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-3xl p-8 text-white text-center"
-            >
-              <div className="text-6xl mb-6">🔮✨</div>
-              <h2 className="text-3xl font-bold mb-6">
-                {t('aboutPage.vision')}
-              </h2>
-              <p className="text-lg leading-relaxed max-w-2xl mx-auto mb-8">
-                {t('aboutPage.visionDescription')}
-              </p>
-              <div className="flex justify-center space-x-4">
-                <button
-                  onClick={() => router.push('/test')}
-                  className="bg-white text-purple-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
-                >
-                  🚀 {t('aboutPage.startTesting')}
-                </button>
-                <button
-                  onClick={() => router.push('/leaderboard')}
-                  className="bg-purple-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-800 transition-colors"
-                >
-                  🏆 {t('aboutPage.viewLeaderboard')}
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Contact Section */}
-        <div className="py-16 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.3 }}
-            >
-              <div className="text-6xl mb-6">📧🤝</div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                {t('aboutPage.contact')}
-              </h2>
-              <p className="text-lg text-gray-600 mb-8">
-                {t('aboutPage.contactDescription')}
-              </p>
-              <div className="bg-white rounded-2xl p-6 shadow-lg inline-block">
-                <div className="text-2xl mb-2">✉️</div>
-                <p className="text-gray-600 mb-2">{t('aboutPage.contactMethod')}</p>
-                <a
-                  href="mailto:contact@bm.chaosyn.com"
-                  className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                >
-                  contact@bm.chaosyn.com
-                </a>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </div>
+        <section className="section"><div className="shell section-head"><div><p className="eyebrow">Contact & source</p><h2>{page.contact}</h2><p>{page.contactBody}</p></div><div className="about-links"><a className="button button--secondary" href="mailto:contact@bm.chaosyn.com">{page.email}</a><a className="button button--secondary" href="https://github.com/evepupil/brain-mark" target="_blank" rel="noreferrer">GitHub</a></div></div></section>
       </Layout>
     </>
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ?? 'zh', ['common'])),
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({ props: { ...(await serverSideTranslations(locale ?? 'zh', ['common'])) } });

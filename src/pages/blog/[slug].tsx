@@ -1,135 +1,107 @@
-import { GetStaticProps, GetStaticPaths } from 'next';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { motion } from 'framer-motion';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../../components/Layout';
 import SEOHead from '../../components/SEOHead';
-import { getPostBySlug, getAllPostSlugs, BlogPost } from '../../lib/blog';
+import { BlogPost, getAllPostSlugs, getPostBySlug } from '../../lib/blog';
 
 interface BlogPostPageProps {
   post: BlogPost;
 }
 
-/**
- * 博客文章详情页面
- */
-export default function BlogPostPage({ post }: BlogPostPageProps) {
-  const { t } = useTranslation('common');
+function formatDate(date: string): string {
+  const parsedDate = new Date(date);
 
+  if (Number.isNaN(parsedDate.getTime())) {
+    return date;
+  }
+
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(parsedDate);
+}
+
+export default function BlogPostPage({ post }: BlogPostPageProps) {
   const articleStructuredData = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "description": post.description,
-    "author": {
-      "@type": "Person",
-      "name": post.author || "Brain Mark Team"
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.description,
+    author: {
+      '@type': 'Person',
+      name: post.author || 'Brain Mark Team',
     },
-    "datePublished": post.date,
-    "dateModified": post.date,
-    "publisher": {
-      "@type": "Organization",
-      "name": "Brain Mark",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://bm.chaosyn.com/favicon.svg"
-      }
+    datePublished: post.date,
+    dateModified: post.date,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Brain Mark',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://bm.chaosyn.com/favicon.svg',
+      },
     },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `https://bm.chaosyn.com/blog/${post.slug}`
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://bm.chaosyn.com/blog/${post.slug}`,
     },
-    "keywords": post.tags?.join(', ')
+    keywords: post.tags?.join(', '),
   };
 
   return (
     <>
       <SEOHead
-        title={`${post.title} - Brain Mark`}
+        title={post.title}
         description={post.description}
         keywords={post.tags?.join(',') || ''}
         type="article"
         structuredData={articleStructuredData}
       />
       <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-12">
-          <article className="max-w-4xl mx-auto px-4">
-            {/* 文章头部 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-lg shadow-lg p-8 mb-8"
-            >
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                {post.title}
-              </h1>
-              <div className="flex items-center text-gray-600 mb-4">
-                <time>{post.date}</time>
-                {post.author && (
-                  <>
-                    <span className="mx-2">·</span>
-                    <span>{post.author}</span>
-                  </>
-                )}
-              </div>
-              {post.tags && post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {post.tags.map(tag => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </motion.div>
-
-            {/* 文章内容 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-white rounded-lg shadow-lg p-8 prose prose-lg max-w-none"
-            >
-              <ReactMarkdown>{post.content}</ReactMarkdown>
-            </motion.div>
-          </article>
-        </div>
+        <article className="article-body">
+          <p className="eyebrow">{post.tags?.[0] ?? '认知科普'} / Brain Mark</p>
+          <div className="article-body__meta">
+            <time dateTime={post.date}>{formatDate(post.date)}</time>
+            {post.author && <><span>·</span><span>{post.author}</span></>}
+          </div>
+          <h1>{post.title}</h1>
+          <p className="article-body__lead">{post.description}</p>
+          <div className="article-markdown">
+            <ReactMarkdown>{post.content}</ReactMarkdown>
+          </div>
+          <p className="article-body__back">
+            <Link className="text-link" href="/blog">← 返回全部文章</Link>
+          </p>
+        </article>
       </Layout>
     </>
   );
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const slugs = getAllPostSlugs();
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: getAllPostSlugs().map((slug) => ({ params: { slug } })),
+  fallback: false,
+});
 
-  return {
-    paths: slugs.map(slug => ({
-      params: { slug },
-    })),
-    fallback: false,
-  };
-};
+export const getStaticProps: GetStaticProps<BlogPostPageProps> = async ({ params, locale }) => {
+  const slug = params?.slug;
 
-export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
-  const slug = params?.slug as string;
+  if (typeof slug !== 'string') {
+    return { notFound: true };
+  }
+
   const post = getPostBySlug(slug);
 
   if (!post) {
-    return {
-      notFound: true,
-    };
+    return { notFound: true };
   }
 
   return {
     props: {
-      post: {
-        ...post,
-        date: post.date.toString(),
-      },
+      post: { ...post, date: post.date.toString() },
       ...(await serverSideTranslations(locale ?? 'zh', ['common'])),
     },
   };

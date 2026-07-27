@@ -1,0 +1,13 @@
+* text=auto eol=lf
+
+/package.json -text whitespace=cr-at-eol
+/package-lock.json -text whitespace=cr-at-eol
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary

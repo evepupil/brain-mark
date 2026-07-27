@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Brain Mark 多页面前端重设计原型">
+  <title>Brain Mark - 认知能力测试</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell header-row">
+      <a class="brand" href="index.html"><img src="../../public/favicon.svg" alt=""><span>Brain Mark</span></a>
+      <nav class="main-nav" aria-label="主导航">
+        <a href="index.html" aria-current="page">首页</a>
+        <a href="tests.html">测试项目</a>
+        <a href="leaderboard.html">排行榜</a>
+        <a href="blog.html">文章</a>
+        <a href="about.html">关于</a>
+        <a class="nav-practice" href="practice.html">练习模式</a>
+      </nav>
+      <div class="header-tools"><button class="language" type="button" data-toast="原型暂未接入语言切换">中 / EN</button><button class="menu-button" type="button" aria-expanded="false" aria-label="打开导航菜单">☰</button></div>
+    </div>
+  </header>
+
+  <div class="notice-bar"><div class="shell notice-row"><span class="notice-dot"></span><span>9 项测试 · 无需注册 · 完成后立即获得结果</span></div></div>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">Human performance, made visible</p>
+          <h1>你的反应速度，<span>到底有多快？</span></h1>
+          <p class="hero-copy">用几分钟测量反应、记忆、注意力和手眼协调能力。每项测试都有清晰规则、即时结果和匿名排名。</p>
+          <div class="hero-actions"><a class="button button--primary" href="tests.html">选择一项测试 <span aria-hidden="true">→</span></a><a class="button button--secondary" href="leaderboard.html">查看排行榜</a></div>
+          <div class="trust-line"><span><i></i>全程匿名</span><span><i></i>成绩保存在本机</span><span><i></i>支持中英文</span></div>
+        </div>
+
+        <div class="reaction-demo">
+          <div class="demo-top"><span>快速体验 / 反应速度</span><span class="demo-lights"><span></span><span></span><span></span></span></div>
+          <div class="demo-stage" data-reaction-demo data-state="idle">
+            <div><div class="demo-stage__icon">●</div><h2>先试一次</h2><p>点击开始，等待画面变绿后尽快按下按钮。</p><button class="demo-start" type="button">开始快速测试</button></div>
+          </div>
+          <div class="demo-meta"><div><span>本次</span><strong data-demo-last>—</strong></div><div><span>本机最佳</span><strong data-demo-best>—</strong></div><div><span>全站平均</span><strong>247 ms</strong></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head"><div><p class="eyebrow">Test library</p><h2>从 9 项测试中选择</h2><p>每一项只测一个明确能力。先了解规则，再进入独立测试页面。</p></div><a class="text-link" href="tests.html">查看全部项目 →</a></div>
+        <div class="test-strip">
+          <a class="test-tile" href="test.html?type=reaction"><div class="test-tile__top"><span class="test-tile__num">01 / 反应</span><span class="test-tile__arrow">→</span></div><h3>反应速度</h3><p>看到信号后立即点击</p><div class="test-tile__visual visual-reaction"></div></a>
+          <a class="test-tile" href="test.html?type=number"><div class="test-tile__top"><span class="test-tile__num">02 / 记忆</span><span class="test-tile__arrow">→</span></div><h3>数字记忆</h3><p>记住越来越长的数字</p><div class="test-tile__visual visual-number">739</div></a>
+          <a class="test-tile" href="test.html?type=visual"><div class="test-tile__top"><span class="test-tile__num">03 / 记忆</span><span class="test-tile__arrow">→</span></div><h3>视觉记忆</h3><p>复现亮起的方格位置</p><div class="test-tile__visual visual-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></a>
+          <a class="test-tile" href="test.html?type=typing"><div class="test-tile__top"><span class="test-tile__num">04 / 速度</span><span class="test-tile__arrow">→</span></div><h3>打字速度</h3><p>测量输入速度与准确率</p><div class="test-tile__visual visual-type">type|</div></a>
+          <a class="test-tile" href="test.html?type=stroop"><div class="test-tile__top"><span class="test-tile__num">08 / 注意</span><span class="test-tile__arrow">→</span></div><h3>斯特鲁普测试</h3><p>在干扰中识别真实颜色</p><div class="test-tile__visual visual-stroop">红</div></a>
+          <a class="test-tile" href="test.html?type=schulte"><div class="test-tile__top"><span class="test-tile__num">09 / 注意</span><span class="test-tile__arrow">→</span></div><h3>舒尔特方格</h3><p>按顺序找到所有数字</p><div class="test-tile__visual visual-schulte"><i>7</i><i>2</i><i>9</i><i>1</i><i>5</i><i>3</i><i>8</i><i>4</i><i>6</i></div></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--ink">
+      <div class="shell">
+        <div class="section-head"><div><p class="eyebrow">Live benchmark</p><h2>看看大家测到了多少</h2><p>成绩以匿名标识参与排名。同一项目 10 分钟内只记录一次，减少重复提交。</p></div><a class="text-link" href="leaderboard.html">完整排行榜 →</a></div>
+        <div class="proof-grid">
+          <div><div class="score-callout"><strong>154</strong><span>ms<br>当前反应速度最快成绩</span></div><div class="rank-list"><div class="rank-row"><span>#01</span><span>anon·3F9A</span><strong>154 ms</strong></div><div class="rank-row"><span>#02</span><span>anon·7C21</span><strong>171 ms</strong></div><div class="rank-row"><span>#03</span><span>anon·B05E</span><strong>183 ms</strong></div></div></div>
+          <aside class="proof-note"><h3>结果怎么理解？</h3><p>一次成绩会受到设备、网络、注意力和疲劳影响。页面会同时展示原始成绩、参考区间与匿名百分位，避免把单次结果包装成医学结论。</p><a class="button button--light" href="about.html">了解测试原则</a></aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="shell"><div class="footer-grid"><div><div class="footer-brand"><img src="../../public/favicon.svg" alt="">Brain Mark</div><p class="footer-note">测试和了解人类认知表现。无需注册，结果仅用于娱乐与自我观察。</p></div><div class="footer-links"><strong>产品</strong><a href="tests.html">测试项目</a><a href="leaderboard.html">排行榜</a><a href="practice.html">练习模式</a></div><div class="footer-links"><strong>了解</strong><a href="blog.html">文章</a><a href="about.html">关于项目</a></div></div><div class="footer-base"><span>Brain Mark · 多页面设计原型</span><span>界面数据均为演示数据</span></div></div></footer>
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

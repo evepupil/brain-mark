@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Brain Mark 独立练习模式原型"><title>练习模式 - Brain Mark</title><link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="site-header"><div class="shell header-row"><a class="brand" href="index.html"><img src="../../public/favicon.svg" alt=""><span>Brain Mark</span></a><nav class="main-nav" aria-label="主导航"><a href="index.html">首页</a><a href="tests.html">测试项目</a><a href="leaderboard.html">排行榜</a><a href="blog.html">文章</a><a href="about.html">关于</a><a class="nav-practice" href="practice.html" aria-current="page">练习模式</a></nav><div class="header-tools"><button class="language" type="button" data-toast="原型暂未接入语言切换">中 / EN</button><button class="menu-button" type="button" aria-expanded="false" aria-label="打开导航菜单">☰</button></div></div></header>
+
+  <main>
+    <section class="practice-intro"><div class="shell practice-intro__grid"><div><p class="eyebrow">Practice mode · 独立功能</p><h1>重复练习，不影响正式测试排名。</h1><p>练习模式允许自由选择时长、难度和重复次数。这里的结果单独保存，不会提交排行榜，也不会覆盖正式测试的最佳成绩。</p><div class="mode-banner"><strong>模式边界：</strong>正式测试用于一次性测量和匿名比较；练习模式用于熟悉规则与重复操作。</div></div><div class="mode-seal"><div><strong>∞</strong><span>不限次数 · 不计排名</span></div></div></div></section>
+    <section class="section"><div class="shell"><div class="section-head"><div><p class="eyebrow">Practice library</p><h2>选择练习内容</h2><p>这一页保持独立，不在首页展示连续天数、目标或训练指数。</p></div></div><div class="practice-grid"><article class="practice-card"><span class="practice-card__label">反应 · 自定义 1–5 分钟</span><h2>反应点击练习</h2><p>自定义目标间隔与持续时间，熟悉点击节奏。</p><button class="button button--secondary" type="button" data-toast="练习功能仅展示界面结构">设置练习</button></article><article class="practice-card"><span class="practice-card__label">记忆 · 自定义难度</span><h2>数字分组练习</h2><p>选择数字长度，反复练习分块记忆方法。</p><button class="button button--secondary" type="button" data-toast="练习功能仅展示界面结构">设置练习</button></article><article class="practice-card"><span class="practice-card__label">注意 · 自定义轮次</span><h2>颜色干扰练习</h2><p>调整颜色数量和答题轮次，熟悉斯特鲁普规则。</p><button class="button button--secondary" type="button" data-toast="练习功能仅展示界面结构">设置练习</button></article></div></div></section>
+  </main>
+
+  <footer class="site-footer"><div class="shell"><div class="footer-grid"><div><div class="footer-brand"><img src="../../public/favicon.svg" alt="">Brain Mark</div><p class="footer-note">练习模式与正式测试的数据和排行榜完全分开。</p></div><div class="footer-links"><strong>正式测试</strong><a href="tests.html">测试项目</a><a href="leaderboard.html">排行榜</a></div><div class="footer-links"><strong>了解</strong><a href="blog.html">文章</a><a href="about.html">关于项目</a></div></div><div class="footer-base"><span>Brain Mark · 独立练习模式原型</span><span>当前只展示信息架构</span></div></div></footer>
+  <div class="toast" role="status" aria-live="polite"></div><script src="app.js"></script>
+</body>
+</html>

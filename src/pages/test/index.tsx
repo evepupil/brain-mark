@@ -1,68 +1,49 @@
 import { GetStaticProps } from 'next';
+import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Layout from '../../components/Layout';
 import TestCard from '../../components/TestCard';
 import { TestType } from '../../lib/types';
 import SEOHead, { pageSEOConfig } from '../../components/SEOHead';
 
-/**
- * 测试页面组件
- * 显示所有可用的测试项目
- */
-export default function TestPage() {
-  const { t } = useTranslation('common');
+const tests = [
+  TestType.REACTION,
+  TestType.MEMORY,
+  TestType.VISUAL,
+  TestType.TYPING,
+  TestType.SEQUENCE,
+  TestType.CHIMP,
+  TestType.AIM,
+  TestType.STROOP,
+  TestType.SCHULTE,
+];
 
-  // 测试项目列表
-  const tests = [
-    {
-      type: TestType.REACTION,
-      icon: '⚡',
-      color: 'from-yellow-400 to-orange-500',
-    },
-    {
-      type: TestType.MEMORY,
-      icon: '🧠',
-      color: 'from-blue-400 to-purple-500',
-    },
-    {
-      type: TestType.VISUAL,
-      icon: '👁️',
-      color: 'from-green-400 to-blue-500',
-    },
-    {
-      type: TestType.TYPING,
-      icon: '⌨️',
-      color: 'from-pink-400 to-red-500',
-    },
-    {
-      type: TestType.SEQUENCE,
-      icon: '🔢',
-      color: 'from-indigo-400 to-purple-500',
-    },
-    {
-      type: TestType.CHIMP,
-      icon: '🐵',
-      color: 'from-amber-400 to-orange-500',
-    },
-    {
-      type: TestType.AIM,
-      icon: '🎯',
-      color: 'from-red-400 to-pink-500',
-    },
-    {
-      type: TestType.STROOP,
-      icon: '🎨',
-      color: 'from-purple-400 to-pink-500',
-    },
-    {
-      type: TestType.SCHULTE,
-      icon: '🔲',
-      color: 'from-cyan-400 to-blue-500',
-    },
+type TestGroup = 'all' | 'speed' | 'memory' | 'attention';
+
+const testGroups: Record<TestType, Exclude<TestGroup, 'all'>> = {
+  [TestType.REACTION]: 'speed',
+  [TestType.MEMORY]: 'memory',
+  [TestType.VISUAL]: 'memory',
+  [TestType.TYPING]: 'speed',
+  [TestType.SEQUENCE]: 'memory',
+  [TestType.CHIMP]: 'memory',
+  [TestType.AIM]: 'speed',
+  [TestType.STROOP]: 'attention',
+  [TestType.SCHULTE]: 'attention',
+};
+
+export default function TestPage() {
+  const { i18n } = useTranslation('common');
+  const [group, setGroup] = useState<TestGroup>('all');
+  const isEnglish = i18n.language.startsWith('en');
+  const visibleTests = group === 'all' ? tests : tests.filter((testType) => testGroups[testType] === group);
+  const filters: Array<{ value: TestGroup; zh: string; en: string }> = [
+    { value: 'all', zh: '全部 9 项', en: 'All 9 tests' },
+    { value: 'speed', zh: '反应与协调', en: 'Reaction & coordination' },
+    { value: 'memory', zh: '记忆', en: 'Memory' },
+    { value: 'attention', zh: '注意力', en: 'Attention' },
   ];
 
   return (
@@ -73,75 +54,47 @@ export default function TestPage() {
         keywords={pageSEOConfig.test.keywords}
       />
       <Layout>
-
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-        {/* 头部区域 */}
-        <div className="text-center py-12 px-4">
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-6xl font-bold text-gray-900 mb-4"
-          >
-            {t('title')}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl text-gray-600 mb-8"
-          >
-            {t('description')}
-          </motion.p>
-        </div>
-
-        {/* 测试项目网格 */}
-        <div className="max-w-6xl mx-auto px-4 pb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tests.map((test, index) => (
-              <motion.div
-                key={test.type}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <TestCard
-                  testType={test.type}
-                  icon={test.icon}
-                  gradient={test.color}
-                />
-              </motion.div>
-            ))}
+        <section className="page-intro">
+          <div className="shell page-intro__row">
+            <div>
+              <p className="eyebrow">Test library</p>
+              <h1 className="page-title">{isEnglish ? 'Choose a test' : '选择一项测试'}</h1>
+              <p className="page-lede">{isEnglish ? 'Each test has its own rules and scoring. See the raw result, reference range and anonymous ranking when you finish.' : '每项测试都有独立规则与计分方式。完成后可以查看原始成绩、参考水平和匿名排行榜。'}</p>
+            </div>
+            <div className="page-index" aria-label={`${tests.length} tests`}>0{tests.length}</div>
           </div>
-        </div>
+        </section>
 
-        {/* 底部链接 */}
-        <div className="text-center pb-8">
-          <div className="flex justify-center space-x-6 text-gray-600">
-            <Link
-              href="/leaderboard"
-              className="hover:text-blue-600 transition-colors"
-            >
-              {t('leaderboard')}
-            </Link>
-            <Link
-              href="/new-about"
-              className="hover:text-blue-600 transition-colors"
-            >
-              {t('about')}
-            </Link>
+        <section className="section">
+          <div className="shell">
+            <div className="filters" role="group" aria-label={isEnglish ? 'Filter tests' : '按能力筛选测试'}>
+              {filters.map((filter) => (
+                <button key={filter.value} className="filter" type="button" aria-pressed={group === filter.value} onClick={() => setGroup(filter.value)}>
+                  {isEnglish ? filter.en : filter.zh}
+                </button>
+              ))}
+            </div>
+            <div className="test-grid">
+              {visibleTests.map((testType, index) => (
+                <motion.div
+                  key={testType}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, delay: index * 0.05 }}
+                >
+                  <TestCard testType={testType} />
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
       </Layout>
     </>
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ?? 'zh', ['common'])),
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'zh', ['common'])),
+  },
+});

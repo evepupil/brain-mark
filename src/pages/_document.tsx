@@ -18,7 +18,7 @@ export default function Document() {
         <meta name="author" content="bm.chaosyn" />
         <meta name="robots" content="index, follow" />
         <meta name="googlebot" content="index, follow" />
-        <meta name="theme-color" content="#3B82F6" />
+        <meta name="theme-color" content="#172027" />
         
         {/* 预加载字体 */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -47,7 +47,7 @@ export default function Document() {
         
         {/* 其他SEO标签 */}
         <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-TileColor" content="#3B82F6" />
+        <meta name="msapplication-TileColor" content="#172027" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="canonical" href="https://bm.chaosyn.com" />
       </Head>

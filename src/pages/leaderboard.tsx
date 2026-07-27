@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
@@ -6,7 +6,7 @@ import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../components/Layout';
 import { getLeaderboard, getTestStats } from '../lib/api';
-import { TestType, LeaderboardRecord } from '../lib/types';
+import { LeaderboardRecord, TestType } from '../lib/types';
 import { formatTestResult } from '../lib/utils';
 import SEOHead, { pageSEOConfig } from '../components/SEOHead';
 
@@ -16,166 +16,93 @@ interface TestStats {
   bestScore: number;
 }
 
-/**
- * 排行榜页面组件
- * 显示各项测试的排行榜和统计信息
- */
+interface TestTypeConfig {
+  type: TestType;
+}
+
+const testTypes: TestTypeConfig[] = [
+  { type: TestType.REACTION },
+  { type: TestType.MEMORY },
+  { type: TestType.VISUAL },
+  { type: TestType.TYPING },
+  { type: TestType.SEQUENCE },
+  { type: TestType.CHIMP },
+  { type: TestType.AIM },
+  { type: TestType.STROOP },
+  { type: TestType.SCHULTE },
+];
+
+function getRankMedalClass(rank: number): string {
+  if (rank === 1) return 'rank-medal rank-medal--gold';
+  if (rank === 2) return 'rank-medal rank-medal--silver';
+  if (rank === 3) return 'rank-medal rank-medal--bronze';
+  return 'rank-medal';
+}
+
+function formatDate(timestamp: number, locale: string): string {
+  return new Date(timestamp).toLocaleDateString(locale, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
+/** 显示各项认知测试的匿名排名和统计信息。 */
 export default function Leaderboard() {
   const { t } = useTranslation('common');
   const router = useRouter();
+  const dateLocale = router.locale === 'en' ? 'en-US' : 'zh-CN';
   const [selectedTest, setSelectedTest] = useState<TestType>(TestType.REACTION);
   const [leaderboard, setLeaderboard] = useState<LeaderboardRecord[]>([]);
   const [stats, setStats] = useState<TestStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const initializedRef = useRef(false);
 
-  // 测试类型配置
-  const testTypes = [
-    {
-      type: TestType.REACTION,
-      name: '反应速度',
-      icon: '⚡',
-      color: 'bg-yellow-500',
-      unit: 'ms',
-    },
-    {
-      type: TestType.MEMORY,
-      name: '数字记忆',
-      icon: '🧠',
-      color: 'bg-blue-500',
-      unit: '位数字',
-    },
-    {
-      type: TestType.VISUAL,
-      name: '视觉记忆',
-      icon: '👁️',
-      color: 'bg-purple-500',
-      unit: '等级',
-    },
-    {
-      type: TestType.TYPING,
-      name: '打字速度',
-      icon: '⌨️',
-      color: 'bg-green-500',
-      unit: 'WPM',
-    },
-    {
-      type: TestType.SEQUENCE,
-      name: '序列记忆',
-      icon: '🔢',
-      color: 'bg-indigo-500',
-      unit: '等级',
-    },
-    {
-      type: TestType.CHIMP,
-      name: '黑猩猩测试',
-      icon: '🐵',
-      color: 'bg-amber-500',
-      unit: '个数字',
-    },
-    {
-      type: TestType.AIM,
-      name: '瞄准训练',
-      icon: '🎯',
-      color: 'bg-red-500',
-      unit: '分',
-    },
-    {
-      type: TestType.STROOP,
-      name: '斯特鲁普效应',
-      icon: '🎨',
-      color: 'bg-purple-500',
-      unit: '分',
-    },
-  ];
-
-  /**
-   * 加载排行榜数据
-   */
   const loadLeaderboard = async (testType: TestType) => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const [leaderboardData, statsData] = await Promise.all([
-        getLeaderboard(testType, 50), // 获取前50名
+        getLeaderboard(testType, 50),
         getTestStats(testType),
       ]);
-      
+
       setLeaderboard(leaderboardData);
       setStats(statsData);
     } catch (err) {
-      console.error('加载排行榜失败:', err);
+      console.error('加载排行榜失败', err);
       setError('加载排行榜失败，请稍后重试');
     } finally {
       setLoading(false);
     }
   };
 
-  /**
-   * 获取排名颜色
-   */
-  const getRankColor = (rank: number) => {
-    if (rank === 1) return 'text-yellow-600 bg-yellow-50';
-    if (rank === 2) return 'text-gray-600 bg-gray-50';
-    if (rank === 3) return 'text-orange-600 bg-orange-50';
-    return 'text-gray-700 bg-gray-50';
-  };
-
-  /**
-   * 获取排名图标
-   */
-  const getRankIcon = (rank: number) => {
-    if (rank === 1) return '🥇';
-    if (rank === 2) return '🥈';
-    if (rank === 3) return '🥉';
-    return `#${rank}`;
-  };
-
-  /**
-   * 格式化时间戳
-   */
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString('zh-CN', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  };
-
-  // 使用 ref 跟踪是否已初始化
-  const initializedRef = useRef(false);
-
-  /**
-   * 初始化：从 URL 参数设置测试类型并加载数据
-   */
   useEffect(() => {
-    if (!router.isReady) return;
+    if (!router.isReady || initializedRef.current) return;
 
-    // 只在首次初始化时处理 URL 参数
-    if (!initializedRef.current) {
-      initializedRef.current = true;
-      const testParam = router.query.test as string;
-      if (testParam && Object.values(TestType).includes(testParam as TestType)) {
-        setSelectedTest(testParam as TestType);
-        loadLeaderboard(testParam as TestType);
-      } else {
-        loadLeaderboard(selectedTest);
-      }
+    initializedRef.current = true;
+    const testParam = router.query.test as string;
+    if (testParam && Object.values(TestType).includes(testParam as TestType)) {
+      const initialTest = testParam as TestType;
+      setSelectedTest(initialTest);
+      loadLeaderboard(initialTest);
+      return;
     }
-  }, [router.isReady]);
 
-  /**
-   * 用户手动切换测试类型时加载数据
-   */
+    loadLeaderboard(selectedTest);
+  }, [router.isReady, router.query.test, selectedTest]);
+
   const handleTestChange = (testType: TestType) => {
     if (testType === selectedTest) return;
+
     setSelectedTest(testType);
     loadLeaderboard(testType);
     router.push(`/leaderboard?test=${testType}`, undefined, { shallow: true });
   };
 
-  const currentTestConfig = testTypes.find(t => t.type === selectedTest);
+  const currentTestName = t(`tests.${selectedTest}.name`);
 
   return (
     <>
@@ -185,182 +112,124 @@ export default function Leaderboard() {
         keywords={pageSEOConfig.leaderboard.keywords}
       />
       <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          {/* 页面标题 */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              🏆 排行榜
-            </h1>
-            <p className="text-gray-600">
-              查看各项测试的最佳成绩
-            </p>
-          </div>
-
-          {/* 测试类型选择 */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {testTypes.map((test) => (
-              <button
-                key={test.type}
-                onClick={() => handleTestChange(test.type)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all ${
-                  selectedTest === test.type
-                    ? `${test.color} text-white shadow-lg scale-105`
-                    : 'bg-white text-gray-700 hover:bg-gray-50 shadow'
-                }`}
-              >
-                <span className="text-lg">{test.icon}</span>
-                <span>{test.name}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* 统计信息 */}
-            <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl shadow-xl p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                  <span className="text-2xl mr-2">{currentTestConfig?.icon}</span>
-                  {currentTestConfig?.name} 统计
-                </h2>
-                
-                {loading ? (
-                  <div className="space-y-4">
-                    {[1, 2, 3].map(i => (
-                      <div key={i} className="animate-pulse">
-                        <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                        <div className="h-6 bg-gray-200 rounded"></div>
-                      </div>
-                    ))}
-                  </div>
-                ) : stats ? (
-                  <div className="space-y-4">
-                    <div className="bg-blue-50 rounded-lg p-4">
-                      <div className="text-sm text-gray-600 mb-1">总参与人数</div>
-                      <div className="text-2xl font-bold text-blue-600">
-                        {stats.totalPlayers.toLocaleString()}
-                      </div>
-                    </div>
-                    
-                    <div className="bg-green-50 rounded-lg p-4">
-                      <div className="text-sm text-gray-600 mb-1">平均成绩</div>
-                      <div className="text-2xl font-bold text-green-600">
-                        {formatTestResult(selectedTest, stats.averageScore)}
-                      </div>
-                    </div>
-                    
-                    <div className="bg-purple-50 rounded-lg p-4">
-                      <div className="text-sm text-gray-600 mb-1">最佳成绩</div>
-                      <div className="text-2xl font-bold text-purple-600">
-                        {formatTestResult(selectedTest, stats.bestScore)}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center text-gray-500 py-8">
-                    暂无统计数据
-                  </div>
-                )}
+          <section className="page-intro">
+            <div className="shell page-intro__row">
+              <div>
+                <p className="eyebrow">Anonymous ranking</p>
+                <h1 className="page-title">{t('leaderboard')}</h1>
+                <p className="page-lede">
+                  选择测试项目，查看近期匿名成绩。不同测试的计分方式不同，页面会明确标注成绩单位。
+                </p>
               </div>
+              <div className="page-index" aria-hidden="true">#01</div>
             </div>
+          </section>
 
-            {/* 排行榜 */}
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl shadow-xl p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-6">
-                  排行榜 - {currentTestConfig?.name}
-                </h2>
-                
-                {loading ? (
-                  <div className="space-y-3">
-                    {[1, 2, 3, 4, 5].map(i => (
-                      <div key={i} className="animate-pulse flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
-                        <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
-                        <div className="flex-1">
-                          <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                          <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                        </div>
-                        <div className="w-16 h-6 bg-gray-200 rounded"></div>
-                      </div>
-                    ))}
-                  </div>
-                ) : error ? (
-                  <div className="text-center text-red-500 py-8">
-                    {error}
-                  </div>
-                ) : leaderboard.length > 0 ? (
-                  <div className="space-y-2">
-                    {leaderboard.map((record, index) => {
+          <section className="leaderboard-layout" aria-label="测试排行榜">
+            <div className="shell">
+              <div className="leaderboard-summary" aria-live="polite">
+                <div className="summary-stat">
+                  <span>当前项目</span>
+                  <strong>{currentTestName}</strong>
+                </div>
+                <div className="summary-stat">
+                  <span>平均成绩</span>
+                  <strong>{loading ? '加载中' : stats ? formatTestResult(selectedTest, stats.averageScore) : '暂无数据'}</strong>
+                </div>
+                <div className="summary-stat">
+                  <span>有效样本</span>
+                  <strong>{loading ? '加载中' : stats ? stats.totalPlayers.toLocaleString() : '暂无数据'}</strong>
+                </div>
+                <div className="summary-stat">
+                  <span>最佳成绩</span>
+                  <strong>{loading ? '加载中' : stats ? formatTestResult(selectedTest, stats.bestScore) : '暂无数据'}</strong>
+                </div>
+              </div>
+
+              <div className="leaderboard-tabs" role="tablist" aria-label="测试排行榜">
+                {testTypes.map((test) => (
+                  <button
+                    key={test.type}
+                    className="leaderboard-tab"
+                    type="button"
+                    role="tab"
+                    aria-selected={selectedTest === test.type}
+                    onClick={() => handleTestChange(test.type)}
+                  >
+                    {t(`tests.${test.type}.name`)}
+                  </button>
+                ))}
+              </div>
+
+              <div className="leaderboard-table-wrap">
+              <table className="leaderboard-table">
+                <caption className="sr-only">{currentTestName} 排行榜</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">排名</th>
+                    <th scope="col">匿名用户</th>
+                    <th scope="col">提交时间</th>
+                    <th scope="col">成绩</th>
+                  </tr>
+                </thead>
+                <tbody aria-live="polite">
+                  {loading ? (
+                    Array.from({ length: 5 }, (_, index) => (
+                      <tr key={index} className="leaderboard-table__loading" aria-hidden="true">
+                        <td><span className="rank-medal">--</span></td>
+                        <td>加载中</td>
+                        <td>--</td>
+                        <td>--</td>
+                      </tr>
+                    ))
+                  ) : error ? (
+                    <tr className="leaderboard-table__message">
+                      <td colSpan={4}>{error}</td>
+                    </tr>
+                  ) : leaderboard.length > 0 ? (
+                    leaderboard.map((record, index) => {
                       const rank = index + 1;
+                      const accuracy = record.metadata?.accuracy;
+
                       return (
-                        <motion.div
+                        <motion.tr
                           key={record.id}
-                          initial={{ opacity: 0, y: 20 }}
+                          initial={{ opacity: 0, y: 12 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
-                          className={`flex items-center justify-between p-4 rounded-lg border-2 transition-all hover:shadow-md ${
-                            rank <= 3 ? getRankColor(rank) : 'bg-gray-50 border-gray-200'
-                          }`}
                         >
-                          <div className="flex items-center space-x-4">
-                            <div className="text-lg font-bold min-w-[3rem] text-center">
-                              {getRankIcon(rank)}
-                            </div>
-                            <div>
-                              <div className="font-medium text-gray-900">
-                                匿名用户 #{record.anonymous_id.slice(-6)}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                {formatDate(record.metadata?.timestamp || record.created_at)}
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="text-right">
-                            <div className="text-lg font-bold text-gray-900">
-                              {formatTestResult(selectedTest, record.result)}
-                            </div>
-                            {record.metadata?.accuracy && (
-                              <div className="text-sm text-gray-500">
-                                准确率: {record.metadata.accuracy}%
-                              </div>
-                            )}
-                          </div>
-                        </motion.div>
+                          <td><span className={getRankMedalClass(rank)}>{rank}</span></td>
+                          <td>匿名用户 #{record.anonymous_id.slice(-6)}</td>
+                          <td>{formatDate(record.metadata?.timestamp || record.created_at, dateLocale)}</td>
+                          <td>
+                            <strong>{formatTestResult(selectedTest, record.result)}</strong>
+                            {accuracy ? <small className="leaderboard-accuracy">准确率 {accuracy}%</small> : null}
+                          </td>
+                        </motion.tr>
                       );
-                    })}
-                  </div>
-                ) : (
-                  <div className="text-center text-gray-500 py-8">
-                    <div className="text-4xl mb-4">🎯</div>
-                    <p>还没有人参与这项测试</p>
-                    <p className="text-sm mt-2">成为第一个挑战者吧！</p>
-                  </div>
-                )}
+                    })
+                  ) : (
+                    <tr className="leaderboard-table__message">
+                      <td colSpan={4}>还没有人参与这项测试，成为第一位挑战者吧。</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
               </div>
-            </div>
-          </div>
 
-          {/* 返回按钮 */}
-          <div className="text-center mt-8">
-            <button
-              onClick={() => router.push('/')}
-              className="bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors"
-            >
-              返回首页
-            </button>
-          </div>
-        </div>
-      </div>
+              <p className="mode-banner">
+                <strong>公平规则：</strong>
+                同一浏览器指纹在同一测试中，10 分钟内只接受一次有效成绩。异常成绩会被自动标记。
+              </p>
+            </div>
+          </section>
       </Layout>
     </>
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ?? 'zh', ['common'])),
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'zh', ['common'])),
+  },
+});
