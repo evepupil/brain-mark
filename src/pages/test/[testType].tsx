@@ -2,9 +2,9 @@ import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
+import SEOHead from '../../components/SEOHead';
 import ReactionTest from '../../components/tests/ReactionTest';
 import MemoryTest from '../../components/tests/MemoryTest';
 import VisualTest from '../../components/tests/VisualTest';
@@ -14,6 +14,7 @@ import ChimpTest from '../../components/tests/ChimpTest';
 import AimTest from '../../components/tests/AimTest';
 import StroopTest from '../../components/tests/StroopTest';
 import SchulteTest from '../../components/tests/SchulteTest';
+import { getLocale, getPageStructuredData, getCanonicalUrl, testSEOConfig } from '../../lib/seo';
 import { TestType } from '../../lib/types';
 
 const testDetails: Record<TestType, { icon: string; duration: string }> = {
@@ -34,6 +35,8 @@ export default function TestPage() {
   const testType = router.query.testType as TestType | undefined;
   const detail = testType ? testDetails[testType] : undefined;
   const isEnglish = i18n.language.startsWith('en');
+  const seo = testType ? testSEOConfig[testType][getLocale(i18n.language)] : undefined;
+  const testUrl = testType ? getCanonicalUrl(`/test/${testType}`, i18n.language) : undefined;
 
   const renderTest = () => {
     switch (testType) {
@@ -67,13 +70,20 @@ export default function TestPage() {
 
   return (
     <Layout>
-      <Head>
-        <title>{testType && t(`tests.${testType}.name`)} - {t('title')}</title>
-        <meta
-          name="description"
-          content={testType ? t(`tests.${testType}.description`) : t('description')}
+      {testType && seo && testUrl && (
+        <SEOHead
+          title={seo.title}
+          description={seo.description}
+          keywords={seo.keywords}
+          url={`/test/${testType}`}
+          structuredData={getPageStructuredData({
+            name: seo.title,
+            description: seo.description,
+            url: testUrl,
+            locale: i18n.language,
+          })}
         />
-      </Head>
+      )}
 
       {detail && testType && (
         <section className="test-context">

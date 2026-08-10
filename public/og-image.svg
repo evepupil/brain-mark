@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Brain Mark</title>
+  <desc id="desc">Online cognitive tests with clear results and anonymous rankings</desc>
+  <rect width="1200" height="630" fill="#f6f6f2"/>
+  <rect width="1200" height="24" fill="#e35d3f"/>
+  <rect x="72" y="74" width="116" height="116" rx="8" fill="#172027"/>
+  <path d="M101 106h24c19 0 31 10 31 26 0 11-6 19-16 23l21 25h-22l-18-22h-2v22h-18zm18 15v22h6c9 0 14-4 14-11s-5-11-14-11z" fill="#f6f6f2"/>
+  <path d="M133 106h25v15h-25zm0 30h25v15h-25z" fill="#e35d3f"/>
+  <text x="72" y="300" fill="#172027" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="700">Brain Mark</text>
+  <text x="76" y="370" fill="#536168" font-family="Arial, Helvetica, sans-serif" font-size="30">Clear cognitive tests. Instant results. Anonymous rankings.</text>
+  <line x1="76" y1="456" x2="1124" y2="456" stroke="#c8cfca" stroke-width="2"/>
+  <text x="76" y="520" fill="#e35d3f" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" letter-spacing="3">REACTION / MEMORY / ATTENTION</text>
+  <text x="1124" y="520" text-anchor="end" fill="#536168" font-family="Arial, Helvetica, sans-serif" font-size="22">bm.chaosyn.com</text>
+</svg>

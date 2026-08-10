@@ -1,7 +1,6 @@
 import type { AppProps } from 'next/app';
 import { appWithTranslation } from 'next-i18next';
 import { Analytics } from '@vercel/analytics/next';
-import Head from 'next/head';
 import '../index.css';
 import '../styles/brain-mark.css';
 
@@ -12,11 +11,6 @@ import '../styles/brain-mark.css';
 function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#ffffff" />
-        <link rel="icon" href="/favicon.svg" />
-      </Head>
       <Component {...pageProps} />
       <Analytics />
     </>

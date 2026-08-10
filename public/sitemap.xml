@@ -1,87 +1,281 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://bm.chaosyn.com/</loc>
-    <lastmod>2026-07-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/" />
   </url>
   <url>
     <loc>https://bm.chaosyn.com/test</loc>
-    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test" />
   </url>
   <url>
-    <loc>https://bm.chaosyn.com/practice</loc>
-    <lastmod>2026-07-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://bm.chaosyn.com/en/test</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test" />
   </url>
   <url>
     <loc>https://bm.chaosyn.com/about</loc>
-    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/about" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/about" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/about" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/about" />
   </url>
   <url>
     <loc>https://bm.chaosyn.com/leaderboard</loc>
-    <lastmod>2026-07-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/leaderboard" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/leaderboard" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/leaderboard" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/leaderboard</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/leaderboard" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/leaderboard" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/leaderboard" />
   </url>
   <url>
     <loc>https://bm.chaosyn.com/test/reaction</loc>
-    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/reaction" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/reaction" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/reaction" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/test/reaction</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/reaction" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/reaction" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/reaction" />
   </url>
   <url>
     <loc>https://bm.chaosyn.com/test/memory</loc>
-    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/memory" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/memory" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/memory" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/test/memory</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/memory" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/memory" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/memory" />
   </url>
   <url>
     <loc>https://bm.chaosyn.com/test/visual</loc>
-    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/visual" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/visual" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/visual" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/test/visual</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/visual" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/visual" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/visual" />
   </url>
   <url>
     <loc>https://bm.chaosyn.com/test/typing</loc>
-    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/typing" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/typing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/typing" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/test/typing</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/typing" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/typing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/typing" />
   </url>
   <url>
     <loc>https://bm.chaosyn.com/test/sequence</loc>
-    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/sequence" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/sequence" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/sequence" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/test/sequence</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/sequence" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/sequence" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/sequence" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/test/chimp</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/chimp" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/chimp" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/chimp" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/test/chimp</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/chimp" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/chimp" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/chimp" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/test/aim</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/aim" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/aim" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/aim" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/test/aim</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/aim" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/aim" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/aim" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/test/stroop</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/stroop" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/stroop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/stroop" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/test/stroop</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/stroop" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/stroop" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/stroop" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/test/schulte</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/schulte" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/schulte" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/schulte" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/test/schulte</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/test/schulte" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/test/schulte" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/test/schulte" />
   </url>
   <url>
     <loc>https://bm.chaosyn.com/blog</loc>
-    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog" />
   </url>
   <url>
     <loc>https://bm.chaosyn.com/blog/improve-reaction-time</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog/improve-reaction-time" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog/improve-reaction-time" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog/improve-reaction-time" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/blog/improve-reaction-time</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog/improve-reaction-time" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog/improve-reaction-time" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog/improve-reaction-time" />
   </url>
   <url>
     <loc>https://bm.chaosyn.com/blog/memory-training-techniques</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog/memory-training-techniques" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog/memory-training-techniques" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog/memory-training-techniques" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/blog/memory-training-techniques</loc>
+    <lastmod>2025-01-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog/memory-training-techniques" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog/memory-training-techniques" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog/memory-training-techniques" />
   </url>
   <url>
     <loc>https://bm.chaosyn.com/blog/stroop-effect-explained</loc>
     <lastmod>2025-01-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog/stroop-effect-explained" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog/stroop-effect-explained" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog/stroop-effect-explained" />
+  </url>
+  <url>
+    <loc>https://bm.chaosyn.com/en/blog/stroop-effect-explained</loc>
+    <lastmod>2025-01-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog/stroop-effect-explained" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog/stroop-effect-explained" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog/stroop-effect-explained" />
   </url>
 </urlset>
