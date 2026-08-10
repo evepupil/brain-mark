@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../components/Layout';
 import QuickReactionDemo from '../components/QuickReactionDemo';
-import SEOHead, { pageSEOConfig } from '../components/SEOHead';
+import SEOHead from '../components/SEOHead';
 import { getLeaderboard, getTestStats } from '../lib/api';
 import { LeaderboardRecord, TestType } from '../lib/types';
+import { getCanonicalUrl, getPageSeo, SITE_NAME, SITE_URL } from '../lib/seo';
 
 interface FeaturedTest {
   type: TestType;
@@ -43,6 +44,7 @@ function TestVisual({ type, className, content }: { type: TestType; className: s
 export default function Home() {
   const { locale } = useRouter();
   const isEnglish = locale === 'en';
+  const seo = getPageSeo('home', locale);
   const [reactionRankings, setReactionRankings] = useState<LeaderboardRecord[]>([]);
   const [reactionStats, setReactionStats] = useState<{ averageScore: number; bestScore: number; totalPlayers: number } | null>(null);
 
@@ -66,10 +68,45 @@ export default function Home() {
   }, []);
 
   const hasReactionStats = Boolean(reactionStats?.totalPlayers);
+  const homeUrl = getCanonicalUrl('/', locale);
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${SITE_URL}/#website`,
+        name: SITE_NAME,
+        url: SITE_URL,
+        inLanguage: isEnglish ? 'en-US' : 'zh-CN',
+        description: seo.description,
+      },
+      {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}/#organization`,
+        name: SITE_NAME,
+        url: SITE_URL,
+        logo: {
+          '@type': 'ImageObject',
+          url: `${SITE_URL}/favicon.svg`,
+        },
+      },
+      {
+        '@type': 'WebApplication',
+        '@id': `${SITE_URL}/#application`,
+        name: SITE_NAME,
+        url: homeUrl,
+        description: seo.description,
+        applicationCategory: 'EducationalApplication',
+        operatingSystem: 'Web Browser',
+        isAccessibleForFree: true,
+        publisher: { '@id': `${SITE_URL}/#organization` },
+      },
+    ],
+  };
 
   return (
     <>
-      <SEOHead title={pageSEOConfig.home.title} description={pageSEOConfig.home.description} keywords={pageSEOConfig.home.keywords} />
+      <SEOHead title={seo.title} description={seo.description} keywords={seo.keywords} structuredData={structuredData} />
       <Layout>
         <div className="notice-bar"><div className="shell notice-row"><span className="notice-dot" /><span>{isEnglish ? '9 tests · No sign-up · Instant results' : '9 项测试 · 无需注册 · 完成后立即获得结果'}</span></div></div>
 

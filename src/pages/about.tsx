@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../components/Layout';
 import SEOHead from '../components/SEOHead';
+import { getCanonicalUrl, getPageSeo, SITE_URL } from '../lib/seo';
 
 const copy = {
   zh: {
@@ -47,10 +48,28 @@ const copy = {
 export default function About() {
   const { locale } = useRouter();
   const page = locale === 'en' ? copy.en : copy.zh;
+  const seo = getPageSeo('about', locale);
+  const aboutUrl = getCanonicalUrl('/about', locale);
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    '@id': `${aboutUrl}#about`,
+    name: seo.title,
+    description: seo.description,
+    url: aboutUrl,
+    inLanguage: locale === 'en' ? 'en-US' : 'zh-CN',
+    mainEntity: {
+      '@type': 'Organization',
+      name: 'Brain Mark',
+      url: SITE_URL,
+      logo: `${SITE_URL}/favicon.svg`,
+      sameAs: ['https://github.com/evepupil/brain-mark'],
+    },
+  };
 
   return (
     <>
-      <SEOHead title={locale === 'en' ? 'About Brain Mark' : '关于 Brain Mark'} description={page.lede} keywords={locale === 'en' ? 'Brain Mark,cognitive test,open source' : '关于 Brain Mark,开源认知测试,认知能力测试'} />
+      <SEOHead title={seo.title} description={seo.description} keywords={seo.keywords} url="/about" structuredData={structuredData} />
       <Layout>
         <section className="page-intro"><div className="shell page-intro__row"><div><p className="eyebrow">About Brain Mark</p><h1 className="page-title">{page.title}</h1><p className="page-lede">{page.lede}</p></div><div className="page-index" aria-hidden="true">BM</div></div></section>
 

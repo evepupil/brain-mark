@@ -177,7 +177,7 @@ N-back是最受研究支持的工作记忆训练方法之一。
 
 通过结合多种技巧和保持良好的生活习惯，大多数人都能在几周内看到显著改善。
 
-立即开始你的记忆力训练之旅，访问 [Brain Mark](https://bm.chaosyn.com) 测试和提升你的认知能力！
+立即开始你的记忆力测试，访问 [Brain Mark 数字记忆测试](https://bm.chaosyn.com/test/memory) 了解自己的表现！
 
 ---
 

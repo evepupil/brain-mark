@@ -121,7 +121,7 @@ tags: [斯特鲁普效应, 认知心理学, 注意力]
 - 与他人比较表现
 - 了解影响表现的因素
 
-立即尝试 [斯特鲁普效应测试](https://bm.chaosyn.com/stroop) 挑战你的大脑！
+立即尝试 [斯特鲁普效应测试](https://bm.chaosyn.com/test/stroop) 挑战你的大脑！
 
 ---
 

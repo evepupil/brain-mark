@@ -6,7 +6,8 @@ import { motion } from 'framer-motion';
 import Layout from '../../components/Layout';
 import TestCard from '../../components/TestCard';
 import { TestType } from '../../lib/types';
-import SEOHead, { pageSEOConfig } from '../../components/SEOHead';
+import SEOHead from '../../components/SEOHead';
+import { getCanonicalUrl, getPageSeo, getTestListStructuredData } from '../../lib/seo';
 
 const tests = [
   TestType.REACTION,
@@ -38,6 +39,8 @@ export default function TestPage() {
   const { i18n } = useTranslation('common');
   const [group, setGroup] = useState<TestGroup>('all');
   const isEnglish = i18n.language.startsWith('en');
+  const seo = getPageSeo('test', i18n.language);
+  const testUrl = getCanonicalUrl('/test', i18n.language);
   const visibleTests = group === 'all' ? tests : tests.filter((testType) => testGroups[testType] === group);
   const filters: Array<{ value: TestGroup; zh: string; en: string }> = [
     { value: 'all', zh: '全部 9 项', en: 'All 9 tests' },
@@ -49,9 +52,16 @@ export default function TestPage() {
   return (
     <>
       <SEOHead
-        title={pageSEOConfig.test.title}
-        description={pageSEOConfig.test.description}
-        keywords={pageSEOConfig.test.keywords}
+        title={seo.title}
+        description={seo.description}
+        keywords={seo.keywords}
+        url="/test"
+        structuredData={getTestListStructuredData({
+          name: seo.title,
+          description: seo.description,
+          url: testUrl,
+          locale: i18n.language,
+        })}
       />
       <Layout>
         <section className="page-intro">

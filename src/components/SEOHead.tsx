@@ -21,6 +21,9 @@ interface SEOHeadProps {
   type?: 'website' | 'article';
   noIndex?: boolean;
   structuredData?: Record<string, unknown>;
+  contentLocale?: SupportedLocale;
+  canonicalLocale?: SupportedLocale;
+  alternateLocales?: readonly SupportedLocale[];
 }
 
 const defaultSeo = localizedPageSEOConfig.home;
@@ -34,16 +37,19 @@ export default function SEOHead({
   type = 'website',
   noIndex = false,
   structuredData,
+  contentLocale,
+  canonicalLocale,
+  alternateLocales,
 }: SEOHeadProps) {
   const router = useRouter();
-  const locale = getLocale(router.locale) as SupportedLocale;
+  const locale = contentLocale || (getLocale(router.locale) as SupportedLocale);
   const copy = defaultSeo[locale];
   const finalTitle = title ? `${title} | ${SITE_NAME}` : `${copy.title} | ${SITE_NAME}`;
   const finalDescription = description || copy.description;
   const finalKeywords = keywords || copy.keywords;
-  const canonicalUrl = getCanonicalUrl(url || router.asPath, locale);
+  const canonicalUrl = getCanonicalUrl(url || router.asPath, canonicalLocale || locale);
   const imageUrl = getAbsoluteAssetUrl(image || '/og-image.svg');
-  const alternateUrls = getAlternateUrls(url || router.asPath);
+  const alternateUrls = getAlternateUrls(url || router.asPath, alternateLocales);
   const pageStructuredData = structuredData || getPageStructuredData({
     name: finalTitle,
     description: finalDescription,

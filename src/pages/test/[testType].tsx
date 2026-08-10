@@ -37,6 +37,22 @@ export default function TestPage() {
   const isEnglish = i18n.language.startsWith('en');
   const seo = testType ? testSEOConfig[testType][getLocale(i18n.language)] : undefined;
   const testUrl = testType ? getCanonicalUrl(`/test/${testType}`, i18n.language) : undefined;
+  const structuredData = seo && testUrl
+    ? {
+        ...getPageStructuredData({
+          name: seo.title,
+          description: seo.description,
+          url: testUrl,
+          locale: i18n.language,
+        }),
+        mainEntity: {
+          '@type': 'Quiz',
+          name: seo.title,
+          description: seo.description,
+          isAccessibleForFree: true,
+        },
+      }
+    : undefined;
 
   const renderTest = () => {
     switch (testType) {
@@ -76,12 +92,7 @@ export default function TestPage() {
           description={seo.description}
           keywords={seo.keywords}
           url={`/test/${testType}`}
-          structuredData={getPageStructuredData({
-            name: seo.title,
-            description: seo.description,
-            url: testUrl,
-            locale: i18n.language,
-          })}
+          structuredData={structuredData}
         />
       )}
 

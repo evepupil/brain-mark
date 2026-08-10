@@ -60,7 +60,7 @@ function getDate(value) {
 }
 
 function getBlogPages() {
-  const blogPages = [{ url: '/blog', changefreq: 'weekly', priority: '0.8' }];
+  const blogPages = [{ url: '/blog', changefreq: 'weekly', priority: '0.8', locales: ['zh'] }];
 
   if (!fs.existsSync(BLOG_DIR)) {
     return blogPages;
@@ -77,6 +77,7 @@ function getBlogPages() {
       url: `/blog/${slug}`,
       changefreq: 'monthly',
       priority: '0.7',
+      locales: ['zh'],
       lastmod: getDate(data.date),
     });
   });
@@ -86,7 +87,8 @@ function getBlogPages() {
 
 function generateUrlEntry(page, locale) {
   const localizedPath = getLocalizedPath(page.url, locale.code);
-  const alternates = LOCALES.map((alternate) => (
+  const pageLocales = page.locales || LOCALES.map((item) => item.code);
+  const alternates = LOCALES.filter((alternate) => pageLocales.includes(alternate.code)).map((alternate) => (
     `    <xhtml:link rel="alternate" hreflang="${alternate.hrefLang}" href="${SITE_URL}${getLocalizedPath(page.url, alternate.code)}" />`
   ));
   alternates.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${page.url}" />`);
@@ -109,7 +111,11 @@ function generateUrlEntry(page, locale) {
 function generateSitemap() {
   const allPages = [...staticPages, ...testPages, ...getBlogPages()];
   const urlEntries = allPages
-    .flatMap((page) => LOCALES.map((locale) => generateUrlEntry(page, locale)))
+    .flatMap((page) => {
+      const pageLocales = page.locales || LOCALES.map((item) => item.code);
+      return LOCALES.filter((locale) => pageLocales.includes(locale.code))
+        .map((locale) => generateUrlEntry(page, locale));
+    })
     .join('\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -122,7 +128,11 @@ function main() {
   fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
   fs.writeFileSync(OUTPUT_PATH, generateSitemap(), 'utf8');
 
-  const totalPages = (staticPages.length + testPages.length + getBlogPages().length) * LOCALES.length;
+  const allPages = [...staticPages, ...testPages, ...getBlogPages()];
+  const totalPages = allPages.reduce((count, page) => {
+    const pageLocales = page.locales || LOCALES.map((item) => item.code);
+    return count + pageLocales.length;
+  }, 0);
   console.log(`Generated ${totalPages} localized sitemap URLs at ${OUTPUT_PATH}`);
 }
 

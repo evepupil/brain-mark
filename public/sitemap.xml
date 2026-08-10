@@ -213,15 +213,6 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog" />
-    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog" />
-  </url>
-  <url>
-    <loc>https://bm.chaosyn.com/en/blog</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog" />
-    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog" />
   </url>
   <url>
@@ -230,16 +221,6 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog/improve-reaction-time" />
-    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog/improve-reaction-time" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog/improve-reaction-time" />
-  </url>
-  <url>
-    <loc>https://bm.chaosyn.com/en/blog/improve-reaction-time</loc>
-    <lastmod>2025-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog/improve-reaction-time" />
-    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog/improve-reaction-time" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog/improve-reaction-time" />
   </url>
   <url>
@@ -248,16 +229,6 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog/memory-training-techniques" />
-    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog/memory-training-techniques" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog/memory-training-techniques" />
-  </url>
-  <url>
-    <loc>https://bm.chaosyn.com/en/blog/memory-training-techniques</loc>
-    <lastmod>2025-01-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog/memory-training-techniques" />
-    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog/memory-training-techniques" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog/memory-training-techniques" />
   </url>
   <url>
@@ -266,16 +237,6 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog/stroop-effect-explained" />
-    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog/stroop-effect-explained" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog/stroop-effect-explained" />
-  </url>
-  <url>
-    <loc>https://bm.chaosyn.com/en/blog/stroop-effect-explained</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://bm.chaosyn.com/blog/stroop-effect-explained" />
-    <xhtml:link rel="alternate" hreflang="en-US" href="https://bm.chaosyn.com/en/blog/stroop-effect-explained" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://bm.chaosyn.com/blog/stroop-effect-explained" />
   </url>
 </urlset>

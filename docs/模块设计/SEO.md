@@ -16,7 +16,7 @@ SEO 模块负责让可公开访问的页面拥有稳定、可理解、与当前�
 
 页面通过 `SEOHead` 传入页面标题、描述、关键词、URL 和可选结构化数据。`src/lib/seo.ts` 统一维护站点域名、语言、页面 SEO 文案、九个测试项目的 SEO 文案，以及去除查询参数和语言前缀后的 canonical URL。
 
-构建时由 `scripts/generate-sitemap.js` 从静态页面、九个测试路由和 `content/blog` 文章生成中英文 sitemap。每个 URL 同时写出 `zh-CN`、`en-US` 和 `x-default` 的替代链接，`public/robots.txt` 允许公开页面抓取并阻止 API 路由。
+构建时由 `scripts/generate-sitemap.js` 从静态页面、九个测试路由和 `content/blog` 文章生成 sitemap。正式测试和信息页生成中英文 URL；文章正文当前只有中文，因此文章只进入中文 sitemap，英文文章路由保留访问但使用 `noindex`。每个可用 URL 写出对应的 `hreflang` 和 `x-default`，`public/robots.txt` 允许公开页面抓取并阻止 API 路由。
 
 ## 关键决策
 
@@ -30,13 +30,16 @@ SEO 模块负责让可公开访问的页面拥有稳定、可理解、与当前�
 
 - `SEOHead` 输出标题、描述、关键词、robots、canonical、Open Graph、Twitter Card、双语 hreflang 和安全转义的 JSON-LD。
 - `src/lib/seo.ts` 提供页面级和测试级中英文 SEO 文案，覆盖反应、记忆、视觉、打字、序列、黑猩猩、瞄准、Stroop 和 Schulte 九个项目。
-- 动态测试页使用项目级 SEO 文案和稳定 URL，不再使用重复的裸 `Head` 标签。
-- sitemap 生成 34 个中英文 URL，排除 `/practice`，并为每篇文章保留 frontmatter 日期。
+- 首页输出 `WebSite`、`Organization` 和 `WebApplication` 数据；测试目录输出包含九个真实入口的 `ItemList`。
+- 动态测试页使用项目级 SEO 文案、`Quiz` 主实体和稳定 URL，不再使用重复的裸 `Head` 标签。
+- 关于页、排行榜、博客目录和文章详情分别输出与页面内容对应的 JSON-LD；文章正文仍以当前仓库的中文内容为准。
+- sitemap 生成 30 个可索引 URL，排除 `/practice` 和未翻译的英文文章，并为每篇文章保留 frontmatter 日期。
 - `public/og-image.svg` 为分享卡片提供可访问的项目视觉资源，修复此前指向不存在 `/og-image.jpg` 的问题。
 
 ## 验证方式
 
 - `npm run generate-sitemap`
+- `npm run test:seo`
 - `npm run type-check`
 - `npm run lint`
 - `npm run build`

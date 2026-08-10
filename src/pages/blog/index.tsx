@@ -1,9 +1,11 @@
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../../components/Layout';
 import SEOHead from '../../components/SEOHead';
 import { BlogPost, getAllPosts } from '../../lib/blog';
+import { getCanonicalUrl, getPageSeo } from '../../lib/seo';
 
 interface BlogIndexProps {
   posts: BlogPost[];
@@ -28,14 +30,43 @@ function getTopic(post: BlogPost): string {
 }
 
 export default function BlogIndex({ posts }: BlogIndexProps) {
+  const { locale } = useRouter();
   const [featuredPost, ...otherPosts] = posts;
+  const seo = getPageSeo('blog', 'zh');
+  const blogUrl = getCanonicalUrl('/blog', 'zh');
+  const language = 'zh-CN';
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${blogUrl}#collection`,
+    name: seo.title,
+    description: seo.description,
+    url: blogUrl,
+    inLanguage: language,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: posts.length,
+      itemListElement: posts.map((post, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: post.title,
+        url: getCanonicalUrl(`/blog/${post.slug}`, 'zh'),
+      })),
+    },
+  };
 
   return (
     <>
       <SEOHead
-        title="认知与测试"
-        description="解读认知测试背后的心理学原理、成绩误差和日常影响因素。"
-        keywords="认知科学,认知测试,反应速度,记忆力,注意力"
+        title={seo.title}
+        description={seo.description}
+        keywords={seo.keywords}
+        url="/blog"
+        contentLocale="zh"
+        canonicalLocale="zh"
+        alternateLocales={['zh']}
+        noIndex={locale === 'en'}
+        structuredData={structuredData}
       />
       <Layout>
         <section className="page-intro">

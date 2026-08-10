@@ -1,10 +1,12 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../../components/Layout';
 import SEOHead from '../../components/SEOHead';
 import { BlogPost, getAllPostSlugs, getPostBySlug } from '../../lib/blog';
+import { getCanonicalUrl, SITE_URL } from '../../lib/seo';
 
 interface BlogPostPageProps {
   post: BlogPost;
@@ -25,6 +27,8 @@ function formatDate(date: string): string {
 }
 
 export default function BlogPostPage({ post }: BlogPostPageProps) {
+  const { locale } = useRouter();
+  const articleUrl = getCanonicalUrl(`/blog/${post.slug}`, 'zh');
   const articleStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -41,14 +45,16 @@ export default function BlogPostPage({ post }: BlogPostPageProps) {
       name: 'Brain Mark',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://bm.chaosyn.com/favicon.svg',
+        url: `${SITE_URL}/favicon.svg`,
       },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://bm.chaosyn.com/blog/${post.slug}`,
+      '@id': articleUrl,
     },
     keywords: post.tags?.join(', '),
+    url: articleUrl,
+    inLanguage: 'zh-CN',
   };
 
   return (
@@ -57,6 +63,11 @@ export default function BlogPostPage({ post }: BlogPostPageProps) {
         title={post.title}
         description={post.description}
         keywords={post.tags?.join(',') || ''}
+        url={`/blog/${post.slug}`}
+        contentLocale="zh"
+        canonicalLocale="zh"
+        alternateLocales={['zh']}
+        noIndex={locale === 'en'}
         type="article"
         structuredData={articleStructuredData}
       />
@@ -82,7 +93,9 @@ export default function BlogPostPage({ post }: BlogPostPageProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => ({
-  paths: getAllPostSlugs().map((slug) => ({ params: { slug } })),
+  paths: getAllPostSlugs().flatMap((slug) => (
+    ['zh', 'en'].map((locale) => ({ params: { slug }, locale }))
+  )),
   fallback: false,
 });
 

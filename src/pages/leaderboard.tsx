@@ -8,7 +8,8 @@ import Layout from '../components/Layout';
 import { getLeaderboard, getTestStats } from '../lib/api';
 import { LeaderboardRecord, TestType } from '../lib/types';
 import { formatTestResult } from '../lib/utils';
-import SEOHead, { pageSEOConfig } from '../components/SEOHead';
+import SEOHead from '../components/SEOHead';
+import { getCanonicalUrl, getPageSeo, getPageStructuredData } from '../lib/seo';
 
 interface TestStats {
   totalPlayers: number;
@@ -49,7 +50,7 @@ function formatDate(timestamp: number, locale: string): string {
 
 /** 显示各项认知测试的匿名排名和统计信息。 */
 export default function Leaderboard() {
-  const { t } = useTranslation('common');
+  const { t, i18n } = useTranslation('common');
   const router = useRouter();
   const dateLocale = router.locale === 'en' ? 'en-US' : 'zh-CN';
   const [selectedTest, setSelectedTest] = useState<TestType>(TestType.REACTION);
@@ -103,13 +104,22 @@ export default function Leaderboard() {
   };
 
   const currentTestName = t(`tests.${selectedTest}.name`);
+  const seo = getPageSeo('leaderboard', i18n.language);
+  const leaderboardUrl = getCanonicalUrl('/leaderboard', i18n.language);
 
   return (
     <>
       <SEOHead
-        title={pageSEOConfig.leaderboard.title}
-        description={pageSEOConfig.leaderboard.description}
-        keywords={pageSEOConfig.leaderboard.keywords}
+        title={seo.title}
+        description={seo.description}
+        keywords={seo.keywords}
+        url="/leaderboard"
+        structuredData={getPageStructuredData({
+          name: seo.title,
+          description: seo.description,
+          url: leaderboardUrl,
+          locale: i18n.language,
+        })}
       />
       <Layout>
           <section className="page-intro">

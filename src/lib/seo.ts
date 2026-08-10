@@ -178,14 +178,18 @@ export function getCanonicalUrl(pathname: string, locale?: string): string {
   return `${SITE_URL}${getLocalizedPath(pathname, locale)}`;
 }
 
-export function getAlternateUrls(pathname: string): Array<{ hrefLang: string; href: string }> {
+export function getAlternateUrls(
+  pathname: string,
+  locales: readonly SupportedLocale[] = SUPPORTED_LOCALES,
+): Array<{ hrefLang: string; href: string }> {
   const basePath = removeLocalePrefix(pathname);
 
-  return [
-    { hrefLang: 'zh-CN', href: getCanonicalUrl(basePath, 'zh') },
-    { hrefLang: 'en-US', href: getCanonicalUrl(basePath, 'en') },
-    { hrefLang: 'x-default', href: getCanonicalUrl(basePath, 'zh') },
-  ];
+  const alternateUrls = locales.map((locale) => ({
+    hrefLang: locale === 'zh' ? 'zh-CN' : 'en-US',
+    href: getCanonicalUrl(basePath, locale),
+  }));
+
+  return [...alternateUrls, { hrefLang: 'x-default', href: getCanonicalUrl(basePath, 'zh') }];
 }
 
 export function getAbsoluteAssetUrl(assetPath: string): string {
@@ -222,6 +226,46 @@ export function getPageStructuredData({
       '@id': `${SITE_URL}/#website`,
       name: SITE_NAME,
       url: SITE_URL,
+    },
+  };
+}
+
+export function getTestListStructuredData({
+  name,
+  description,
+  url,
+  locale,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  locale?: string;
+}) {
+  const resolvedLocale = getLocale(locale);
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${url}#collection`,
+    name,
+    description,
+    url,
+    inLanguage: resolvedLocale === 'en' ? 'en-US' : 'zh-CN',
+    mainEntity: {
+      '@type': 'ItemList',
+      name,
+      numberOfItems: Object.keys(testSEOConfig).length,
+      itemListOrder: 'https://schema.org/ItemListOrderAscending',
+      itemListElement: Object.entries(testSEOConfig).map(([testType, copies], index) => {
+        const copy = copies[resolvedLocale];
+
+        return {
+          '@type': 'ListItem',
+          position: index + 1,
+          name: copy.title,
+          url: getCanonicalUrl(`/test/${testType}`, resolvedLocale),
+        };
+      }),
     },
   };
 }
